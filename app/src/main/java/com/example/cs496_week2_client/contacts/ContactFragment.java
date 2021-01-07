@@ -1,5 +1,6 @@
 package com.example.cs496_week2_client.contacts;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -30,6 +32,9 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ContactAdapter adapter;
+    private LayoutInflater initInflater;
+    private ViewGroup initContainer;
+    private Bundle initSavedInstanceState;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -49,6 +54,11 @@ public class ContactFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Store parameters
+        initInflater = inflater;
+        if (container != null) initContainer = container;
+        if (savedInstanceState != null) initSavedInstanceState = savedInstanceState;
+
         // RecyclerView Initialization
         view = inflater.inflate(R.layout.fragment_contact, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
@@ -94,17 +104,42 @@ public class ContactFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_INSERT);
                 intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 10000);
             }
         });
+
+        // Init createButton
+        FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CreateActivity.class);
+                startActivityForResult(intent, 10001);
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MainActivity main = (MainActivity) getActivity();
-        main.setViewPager(0);
+        if (resultCode == Activity.RESULT_OK) {
+            MainActivity main = (MainActivity) getActivity();
+            switch (requestCode) {
+                //addButton click
+                case 10000:
+                    main.setViewPager(0);
+                    break;
+
+                //createButton click
+                case 10001:
+                    main.setViewPager(0);
+                    //onCreateView(initInflater, initContainer, initSavedInstanceState);
+                    break;
+            }
+        }
+
     }
 
     private ArrayList<Contact> getContacts() {

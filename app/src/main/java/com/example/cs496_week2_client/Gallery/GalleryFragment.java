@@ -128,7 +128,7 @@ public class GalleryFragment extends Fragment {
     public Uri BitmapToUri(Context context, Bitmap bitmap){
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title"+System.currentTimeMillis(), null);
+        String path = MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), bitmap, "Title"+System.currentTimeMillis(), null);
         return Uri.parse(path);
     }
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_y="500pt"
     android:background="#FFFFFF"
     tools:context="contacts.ContactFragment">
@@ -19,6 +20,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
         android:scrollbars="horizontal" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/phone_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="70dp"
+        android:clickable="true"
+        android:backgroundTint="@color/fab_color"
+        app:borderWidth="0dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_anchor="@id/recycler"
+        app:layout_anchorGravity="bottom|right|end" />
 
     <ImageButton
         android:id="@+id/addButton"
