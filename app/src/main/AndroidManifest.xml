@@ -20,7 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS496_week2_client">
         <activity android:name=".Gallery.ViewImage"></activity>
-        <activity android:name=".CSCal.BitOperation"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
