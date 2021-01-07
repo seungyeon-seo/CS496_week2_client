@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".contacts.CreateActivity"></activity>
+        <activity android:name=".contacts.ContactInfoActivity"></activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"

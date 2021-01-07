@@ -3,6 +3,7 @@ package com.example.cs496_week2_client.contacts;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION){
                         Contact ct = mData.get(pos);
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(ContactsContract.Contacts.getLookupUri(ct.id, ct.lookup));
-                        fragment.startActivityForResult(intent, 0);
+                        Intent intent = new Intent(v.getContext(), ContactInfoActivity.class);
+                        intent.putExtra("Name", ct.fullName);
+                        intent.putExtra("Number", ct.phone);
+                        if (ct.image != null) intent.putExtra("Image", ct.image.toString());
+                        else intent.putExtra("Image", "");
+                        fragment.startActivityForResult(intent, 10002);
                     }
                 }
             });
