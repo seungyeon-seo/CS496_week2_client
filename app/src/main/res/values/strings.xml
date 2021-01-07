@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">CS496_week2_client</string>
+    <string name="app_name">CS496_proj1</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="numeral_system">Numeral System</string>
+    <string name="bitwise_operation">Bitwise Operation</string>
+    <string name="welcome_to_cs_calculator">Welcome to CS_Calculator !</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu1">통화내역</string>
+    <string name="menu2">주소록</string>
 </resources>
