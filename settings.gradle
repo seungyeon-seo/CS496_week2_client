@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "CS496_week2_client"
