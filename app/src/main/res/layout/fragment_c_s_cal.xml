@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_y="500pt"
-    tools:context=".CSCal.CSCalFragment">
+    tools:context=".chat.ChatFragment">
 
     <TextView
         android:layout_width="match_parent"

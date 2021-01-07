@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.cs496_week2_client.CSCal.CSCalFragment;
+import com.example.cs496_week2_client.chat.ChatFragment;
 import com.example.cs496_week2_client.Gallery.GalleryFragment;
 import com.example.cs496_week2_client.contacts.ContactFragment;
 
@@ -22,7 +22,6 @@ public class TabPagerAdapter extends FragmentStateAdapter {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public Fragment createFragment(int position) {
-
         switch (position) {
             case 0:
             default:
@@ -30,7 +29,7 @@ public class TabPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return GalleryFragment.newInstance();
             case 2:
-                return CSCalFragment.newInstance();
+                return ChatFragment.newInstance();
         }
     }
 
