@@ -97,17 +97,6 @@ public class ContactFragment extends Fragment {
             }
         });
 
-        // Init addButton
-        ImageButton addButton = (ImageButton) view.findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_INSERT);
-                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                startActivityForResult(intent, 10000);
-            }
-        });
-
         // Init createButton
         FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -127,15 +116,9 @@ public class ContactFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             MainActivity main = (MainActivity) getActivity();
             switch (requestCode) {
-                //addButton click
-                case 10000:
-                    main.setViewPager(0);
-                    break;
-
                 //createButton click
                 case 10001:
                     main.setViewPager(0);
-                    //onCreateView(initInflater, initContainer, initSavedInstanceState);
                     break;
             }
         }
