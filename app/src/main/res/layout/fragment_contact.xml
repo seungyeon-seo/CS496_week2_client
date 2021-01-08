@@ -10,7 +10,7 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        android:layout_width="match_parent"
+        android:layout_width="305dp"
         android:layout_height="55dp"
         android:background="#FFFFFF" />
 
@@ -34,5 +34,15 @@
         android:src="@drawable/ic_baseline_add_24"
         app:layout_anchor="@id/recycler"
         app:layout_anchorGravity="bottom|right|end" />
+
+    <Button
+        android:id="@+id/synchButton"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="305dp"
+        android:text="동기화"
+        android:textColor="@color/white"
+        android:background="@color/fab_color"
+        android:fontFamily="@font/nanumsqure_r" />
 
 </FrameLayout>

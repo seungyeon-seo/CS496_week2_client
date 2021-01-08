@@ -2,6 +2,7 @@ package com.example.cs496_week2_client.contacts;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -84,7 +85,13 @@ public class CreateActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(getApplicationContext(), "저장되었습니다", Toast.LENGTH_LONG).show();
-                    setResult(Activity.RESULT_OK);
+
+                    // Set intent
+                    Intent intent = getIntent();
+                    intent.putExtra("fullName", name);
+                    intent.putExtra("phone", number);
+
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
                     onResume();
                 }

@@ -2,6 +2,8 @@ package com.example.cs496_week2_client.contacts;
 
 import com.example.cs496_week2_client.models.ContactModel;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.OkHttpClient;
@@ -11,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
@@ -31,8 +34,8 @@ public class ContactDataService {
 }
 
 interface SelectAPI{
-//    @GET("get")
-//    Call<Test> selectOne();
+    @GET("contact/get")
+    Call<ArrayList<ContactModel>> getContacts();
 
 //    @GET("get2")
 //    Call<Test> selectById(@Path("id") long id);
@@ -45,7 +48,7 @@ interface InsertAPI{
 
 interface UpdateAPI{
 //    @PUT("contact/update")
-//    Call<Contact> updateContact(@Body Contact param);
+//    Call<ContactModel> updateContact(@Body HashMap<String, Object> param);
 }
 
 interface DeleteAPI{
