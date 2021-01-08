@@ -37,10 +37,10 @@ public class LoginCallback implements FacebookCallback<LoginResult> {
 
     // 사용자 정보 요청
     public void requestMe(AccessToken token) {
-
         GraphRequest graphRequest = GraphRequest.newMeRequest(token,
                 (object, response) -> Log.e("result",object.toString()));
 
+        Log.i("Token: ", token.getToken());
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email,gender,birthday");
         graphRequest.setParameters(parameters);
