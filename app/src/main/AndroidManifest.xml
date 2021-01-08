@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
     <uses-feature android:name="android.hardware.camera2" />
@@ -19,7 +20,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CS496_week2_client">
+        android:theme="@style/Theme.CS496_week2_client"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity android:name=".Gallery.ViewImage"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>

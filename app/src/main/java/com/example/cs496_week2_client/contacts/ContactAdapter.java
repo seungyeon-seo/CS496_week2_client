@@ -91,7 +91,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void onBindViewHolder(ContactAdapter.ViewHolder holder, int position) {
         Contact element = mData.get(position) ;
         if (element.image != null)
-            holder.imageView.setImageURI(element.image);
+            holder.imageView.setImageURI(Uri.parse(element.image));
         holder.nameView.setText(element.fullName);
         holder.numView.setText(element.phone);
     }

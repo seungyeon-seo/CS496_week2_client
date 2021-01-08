@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -21,10 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.models.ContactModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ContactFragment extends Fragment {
     View view;
@@ -32,9 +39,11 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ContactAdapter adapter;
-    private LayoutInflater initInflater;
-    private ViewGroup initContainer;
-    private Bundle initSavedInstanceState;
+    LayoutInflater initInflater;
+    ViewGroup initContainer;
+    Bundle initSavedInstanceState;
+    ContactDataService dataService;
+
 
     public ContactFragment() {
         // Required empty public constructor
@@ -49,6 +58,7 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dataService = new ContactDataService();
     }
 
     @Override
@@ -154,6 +164,8 @@ public class ContactFragment extends Fragment {
 
                 Contact contact = new Contact(phone, fullName, image, person, lookup);
 
+                postContact(contact);
+
                 if (contact.isStartWith("01")) {
                     hasList.add(contact);
                     Log.d("<<CONTACTS>>", contact.getMsg());
@@ -163,13 +175,41 @@ public class ContactFragment extends Fragment {
         }
 
         contacts = new ArrayList<Contact>(hasList);
-        for (int i = 0; i < contacts.size(); i++) {
-            contacts.get(i).setId(i);
-        }
-
         if (cursor != null) {
             cursor.close();
         }
         return contacts;
+    }
+
+    private void postContact(Contact contact) {
+        // Set input to POST to server
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("fullName", contact.fullName);
+        input.put("phone", contact.phone);
+        input.put("lookup", contact.lookup);
+        input.put("personId", Long.toString(contact.personId));
+        input.put("image", contact.image);
+
+        // Init POST function
+        dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
+            @Override
+            public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
+                Log.d("InsertContact", "on Response");
+                if (!response.isSuccessful()) {
+                    Log.i("InsertContact", "response is not successful");
+                    return;
+                }
+                ContactModel ct = response.body();
+                if (ct != null) {
+                    Log.d("InsertContact", "contact is filled");
+                } else Log.d("InsertContact", "contact is null");
+            }
+
+            @Override
+            public void onFailure(Call<ContactModel> call, Throwable t) {
+                Log.e("InsertContact", "Fail to insert contact " + contact.fullName);
+                t.printStackTrace();
+            }
+        });
     }
 }
