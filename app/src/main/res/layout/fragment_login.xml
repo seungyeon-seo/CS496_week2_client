@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="chat.ChatFragment">
+    tools:context=".login.LoginFragment">
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="페이스북 로그인"
-        android:textSize="100sp"
+        android:text="@string/facebook_login"
+        android:textSize="36sp"
         android:visibility="visible"
-        tools:text="페이스북 로그인" />
+        tools:text="@string/facebook_login" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btn_facebook_login"

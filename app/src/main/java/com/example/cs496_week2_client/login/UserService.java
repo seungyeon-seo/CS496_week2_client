@@ -1,4 +1,6 @@
-package com.example.cs496_week2_client.api;
+package com.example.cs496_week2_client.login;
+
+import com.example.cs496_week2_client.models.User;
 
 import java.util.Map;
 
@@ -9,15 +11,15 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-class UserService {
+public class UserService {
     private Retrofit retrofitClient;
-
     public UserService(Retrofit retrofit) {
         retrofitClient = retrofit;
     }
 
     AuthAPI auth = retrofitClient.create(AuthAPI.class);
-    // TODO 유저 정보 수정
+
+    // TODO 유저 정보 수정 API
 }
 
 interface AuthAPI {
@@ -26,4 +28,5 @@ interface AuthAPI {
 
     @POST("auth/register")
     Call<User> register(@Body Map<String, String> map);
+
 }
