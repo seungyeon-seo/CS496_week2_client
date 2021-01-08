@@ -1,4 +1,6 @@
-package com.example.cs496_week2_client.api;
+package com.example.cs496_week2_client.post;
+
+import com.example.cs496_week2_client.models.Post;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-class PostService {
+public class PostService {
     private Retrofit retrofitClient;
     
     public PostService(Retrofit retrofit) {
