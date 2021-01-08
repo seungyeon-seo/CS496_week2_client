@@ -13,11 +13,13 @@ import retrofit2.http.Path;
 
 public class UserService {
     private Retrofit retrofitClient;
+    AuthAPI auth;
+
     public UserService(Retrofit retrofit) {
         retrofitClient = retrofit;
+        auth = retrofitClient.create(AuthAPI.class);
     }
 
-    AuthAPI auth = retrofitClient.create(AuthAPI.class);
 
     // TODO 유저 정보 수정 API
 }

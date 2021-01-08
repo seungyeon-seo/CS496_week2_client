@@ -21,6 +21,7 @@ public class LoginCallback implements FacebookCallback<LoginResult> {
     public void onSuccess(LoginResult loginResult) {
         AccessToken accessToken = loginResult.getAccessToken();
         String token = accessToken.getToken();
+        Log.d("LoginCallback", token);
 
         Api.getInstance().getUserService().auth.login(token).enqueue(new Callback<User>() {
             // 토큰 검증 결과에 따라 로그 출력

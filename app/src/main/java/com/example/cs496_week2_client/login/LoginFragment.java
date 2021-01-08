@@ -71,9 +71,5 @@ public class LoginFragment extends Fragment {
         // 다음 FeedFragment 로 넘기기
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         String token = accessToken.getToken();
-
-
-
-
     }
 }

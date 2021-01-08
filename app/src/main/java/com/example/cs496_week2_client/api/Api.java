@@ -36,7 +36,7 @@ public class Api {
                         .build();
 
         // 서비스 초기화
-        this.PostService = new PostService(retrofitClient);
+//        this.PostService = new PostService(retrofitClient);
         this.UserService = new UserService(retrofitClient);
     }
 
