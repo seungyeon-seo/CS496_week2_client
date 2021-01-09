@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_y="500pt"
     android:id="@+id/framelayout"
-    tools:context=".Gallery.GalleryFragment">
+    tools:context=".ui.gallery.GalleryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -18,7 +18,7 @@
         android:id="@+id/camera"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_marginTop="635dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -26,6 +26,7 @@
         android:background="#77B2C5"
         android:tint="#FFFFFFFF"
         android:gravity="center"
+        android:contentDescription="camera button"
         android:src="@drawable/ic_camera_foreground" />
 
     <ImageView

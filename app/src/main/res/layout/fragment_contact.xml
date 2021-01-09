@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_y="500pt"
     android:background="#FFFFFF"
-    tools:context="contacts.ContactFragment">
+    tools:context=".ui.contacts.ContactFragment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"

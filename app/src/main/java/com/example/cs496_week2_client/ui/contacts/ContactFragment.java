@@ -1,4 +1,4 @@
-package com.example.cs496_week2_client.contacts;
+package com.example.cs496_week2_client.ui.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
