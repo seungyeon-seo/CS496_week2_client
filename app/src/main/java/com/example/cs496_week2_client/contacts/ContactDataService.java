@@ -18,7 +18,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
 public class ContactDataService {
-    private String BASE_URL = "http://192.249.18.216/test/";
+    private String BASE_URL = "http://192.249.18.224/test/";
 
     Retrofit retrofitClient =
             new Retrofit.Builder()
@@ -36,11 +36,8 @@ public class ContactDataService {
 interface SelectAPI{
     @GET("contact/get")
     Call<ArrayList<ContactModel>> getContacts();
-
-//    @GET("get2")
-//    Call<Test> selectById(@Path("id") long id);
-
 }
+
 interface InsertAPI{
     @POST("contact/insert")
     Call<ContactModel> insertContact(@Body HashMap<String, Object> param);

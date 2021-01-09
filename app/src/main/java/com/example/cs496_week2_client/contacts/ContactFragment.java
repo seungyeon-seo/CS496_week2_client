@@ -3,6 +3,7 @@ package com.example.cs496_week2_client.contacts;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.fonts.FontVariationAxis;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -119,13 +122,14 @@ public class ContactFragment extends Fragment {
         });
 
         // Init synchButton
-        Button synchButton = view.findViewById(R.id.synchButton);
+        ImageButton synchButton = view.findViewById(R.id.synchButton);
         synchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < contacts.size(); i++) {
                     postContact(contacts.get(i));
                 }
+                Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -153,7 +157,10 @@ public class ContactFragment extends Fragment {
 
     private ArrayList<Contact> getContacts() {
         LinkedHashSet<Contact> contactSet = getContactsDevice();
-        contactSet.addAll(getContactsServer());
+        Log.i("GetContacts", "Done from device");
+        LinkedHashSet<Contact> serverSet = getContactsServer();
+        Log.i("GetContacts", "Done from server");
+        contactSet.addAll(serverSet);
 
         contacts = new ArrayList<Contact>(contactSet);
 
@@ -203,21 +210,24 @@ public class ContactFragment extends Fragment {
 
     private LinkedHashSet<Contact> getContactsServer() {
         LinkedHashSet<Contact> hashSet = new LinkedHashSet<Contact>();
+        Log.i("GetContactServer", "Start");
         dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
+
             @Override
             public void onResponse(Call<ArrayList<ContactModel>> call,
                                    Response<ArrayList<ContactModel>> response) {
+                Log.i("GetContactServer", "Response");
                 if (response.isSuccessful()) {
                     ArrayList<ContactModel> contactModels = response.body();
                     for (int i = 0; i < contactModels.size(); i++) {
                         Contact ct = new Contact(contactModels.get(i).getPhone(),
                                 contactModels.get(i).getFullName(),
                                 contactModels.get(i).getImage(),
-                                Long.getLong(contactModels.get(i).getPersonId()),
-                                contactModels.get(i).getLookup());
+                                Long.parseLong(contactModels.get(i).getPersonId()),
+                                contactModels.get(i).getLookup() );
                         hashSet.add(ct);
                     }
-                    Log.i("Get Contact Server", "Success");
+                    Log.i("GetContactServer", "Success");
                 }
                 else try {
                     throw new Exception("response is not successful");
@@ -227,7 +237,7 @@ public class ContactFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<ArrayList<ContactModel>> call, Throwable t) {
-                Log.d("MainActivity", "Failed to get data");
+                Log.d("GetContactServer", "Failed to get data");
                 t.printStackTrace();
             }
         });

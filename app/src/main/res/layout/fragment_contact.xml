@@ -35,14 +35,16 @@
         app:layout_anchor="@id/recycler"
         app:layout_anchorGravity="bottom|right|end" />
 
-    <Button
+    <ImageButton
         android:id="@+id/synchButton"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginLeft="305dp"
-        android:text="동기화"
-        android:textColor="@color/white"
+        android:src="@drawable/synch"
+        android:scaleType="fitCenter"
+        android:tint="@color/white"
         android:background="@color/fab_color"
-        android:fontFamily="@font/nanumsqure_r" />
+        android:fontFamily="@font/nanumsqure_r"
+        />
 
 </FrameLayout>
