@@ -26,4 +26,7 @@
     <string name="phone_number">전화번호</string>
     <string name="add_phone_number">전화번호 추가</string>
     <string name="save">저장</string>
+    <string name="camera_button">camera FAB</string>
+    <string name="item_image_src">image of item_image</string>
+    <string name="new_post_button">new_post_button</string>
 </resources>

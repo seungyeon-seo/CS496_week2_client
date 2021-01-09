@@ -11,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cs496_week2_client.ui.gallery.ImageUnit;
-
 import com.bumptech.glide.RequestManager;
 import com.example.cs496_week2_client.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
@@ -26,11 +25,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     // ViewHolder: store item view
     public static class ViewHolder extends RecyclerView.ViewHolder{
+        MaterialCardView imageCard;
         ImageView image;
 
         ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            imageCard = itemView.findViewById(R.id.item_image);
+            image = itemView.findViewById(R.id.image);
         }
     }
 
@@ -42,28 +43,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @NonNull
     @Override public ImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
         return new ViewHolder(view);
     }
 
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
         ImageUnit photo = ImgList.get(position);
+        ImageView image = holder.image;
 
         mRequestManager
                 .load(photo.imageUri)
                 .into(holder.image);
 
         // holder.image.setImageURI(photo.imageUri);
-        holder.image.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ViewImage.class);
-                if (intent != null) {
-                    String str_uri = photo.imageUri.toString();
-                    intent.putExtra("uri", str_uri);
-                    v.getContext().startActivity(intent);
-                }
-            }
+        holder.image.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ViewImage.class);
+            String str_uri = photo.imageUri.toString();
+            intent.putExtra("uri", str_uri);
+            v.getContext().startActivity(intent);
         });
     }
 

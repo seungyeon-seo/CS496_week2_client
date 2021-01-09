@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_margin="50dp"
-    tools:context=".contacts.CreateActivity">
+    tools:context=".ui.contacts.CreateActivity">
 
     <EditText
         android:id="@+id/create_phone_name"
@@ -18,7 +18,8 @@
         android:ems="10"
         android:hint="@string/name"
         android:inputType="textPersonName"
-        tools:text="@string/name_example" />
+        tools:text="@string/name_example"
+        tools:ignore="TextFields" />
 
     <EditText
         android:id="@+id/create_phone_number"

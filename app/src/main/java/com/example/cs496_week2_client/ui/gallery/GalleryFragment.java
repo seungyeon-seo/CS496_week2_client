@@ -37,7 +37,6 @@ public class GalleryFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     ImageAdapter adapter;
     int CAPTURE_PHOTO = 10;
-    ImageView imageview;
     public RequestManager mGlideRequestManager;
 
     public GalleryFragment() {
@@ -62,7 +61,6 @@ public class GalleryFragment extends Fragment {
         // mRecyclerView Initialization
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        imageview = (ImageView) view.findViewById(R.id.image_view);
 
         // Camera Button
         ImageButton camera = (ImageButton) view.findViewById(R.id.camera);
