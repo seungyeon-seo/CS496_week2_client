@@ -1,4 +1,4 @@
-package com.example.cs496_week2_client.login;
+package com.example.cs496_week2_client.ui.login;
 
 import android.util.Log;
 
@@ -23,26 +23,26 @@ public class LoginCallback implements FacebookCallback<LoginResult> {
         String token = accessToken.getToken();
         Log.d("LoginCallback", token);
 
-        Api.getInstance().getUserService().auth.login(token).enqueue(new Callback<User>() {
-            // 토큰 검증 결과에 따라 로그 출력
-            @Override
-            @EverythingIsNonNull
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    Log.i("LoginCallback", "정상적인 토큰입니다");
-                } else {
-                    Log.i("LoginCallback", "정상 토큰이 아닙니다");
-                }
-            }
-
-            @Override
-            @EverythingIsNonNull
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d("LoginCallback", "로그인(auth/{token}) API 호출에 실패했습니다");
-                t.printStackTrace();
-            }
-        });
-
+//        Api.getInstance().getUserService().auth.login(token).enqueue(new Callback<User>() {
+//            // 토큰 검증 결과에 따라 로그 출력
+//            @Override
+//            @EverythingIsNonNull
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                if (response.isSuccessful()) {
+//
+//                    Log.i("LoginCallback", "정상적인 토큰입니다");
+//                } else {
+//                    Log.i("LoginCallback", "정상 토큰이 아닙니다");
+//                }
+//            }
+//
+//            @Override
+//            @EverythingIsNonNull
+//            public void onFailure(Call<User> call, Throwable t) {
+//                Log.d("LoginCallback", "로그인(auth/{token}) API 호출에 실패했습니다");
+//                t.printStackTrace();
+//            }
+//        });
     }
 
     // 로그인 창을 닫을 경우, 호출됩니다.

@@ -8,60 +8,36 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import com.example.cs496_week2_client.models.User;
+import com.example.cs496_week2_client.ui.login.LoginActivity;
+import com.example.cs496_week2_client.ui.login.RegisterActivity;
+import com.example.cs496_week2_client.util.RequestCode;
+import com.example.cs496_week2_client.util.ResponseCode;
+import com.example.cs496_week2_client.util.UserUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     /* Permission variables */
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS = { Manifest.permission.READ_EXTERNAL_STORAGE,
+    private static final int LOGIN_REQUEST_CODE = 1018;
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,
-            Manifest.permission.CAMERA,  Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.WRITE_CONTACTS };
-    public int[] grandResults = {-1, -1, -1, -1, -1, -1 };
+            Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public int[] grandResults = {-1, -1, -1, -1, -1, -1, -1};
 
     /* Tab variables */
     private ViewPager2 viewPager;
     TabPagerAdapter fgAdapter;
-
-
-    private void getHashKey(){
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo == null)
-            Log.e("KeyHash", "KeyHash:null");
-
-        for (Signature signature : packageInfo.signatures) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            } catch (NoSuchAlgorithmException e) {
-                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
-            }
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +47,10 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 로그인 액티비티 실행
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
 
         // TabLayout Initialization
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -85,13 +65,13 @@ public class MainActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                 default:
-                    tab.setText("Contacts");
+                    tab.setText("CONTACT");
                     break;
                 case 1:
-                    tab.setText("Gallery");
+                    tab.setText("GALLERY");
                     break;
                 case 2:
-                    tab.setText("Facebook");
+                    tab.setText("FEED");
                     break;
             }
             viewPager.setCurrentItem(0);
@@ -114,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void setViewPager (int pos) {
+    public void setViewPager(int pos) {
         viewPager.setAdapter(fgAdapter);
         viewPager.setCurrentItem(pos);
     }
@@ -122,7 +102,51 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RequestCode.LOGIN_REQUEST_CODE:
+                handleLoginActivityResult(resultCode, data);
+                break;
+            case RequestCode.REGISTER_REQUEST_CODE:
+                handleRegisterActivityResult(resultCode, data);
+                break;
+            default:
+                Log.e("MainActivity", "해당 requestCode 는 존재하지 않습니다 : " + requestCode);
+        }
     }
+
+    private void handleLoginActivityResult(int resultCode, Intent data) {
+        switch (resultCode) {
+            case ResponseCode.LOGIN_SUCCESSFUL:
+                // TODO: Feed Fragment 에 유저 데이터 전달
+                String token = data.getStringExtra("token");
+                User user = UserUtils.parseUserIntent(data);
+                Log.i("MainActivity", "Login 성공 - nickName: " + user.getNickName());
+                break;
+            case ResponseCode.REGISTER_REQUIRED: // Register Activity 시작
+                Intent registerIntent = new Intent(this, RegisterActivity.class);
+                startActivityForResult(registerIntent, RequestCode.REGISTER_REQUEST_CODE);
+                break;
+            default:
+                Log.e("MainActivity", "LoginActivity 실패");
+                break;
+        }
+    }
+
+    private void handleRegisterActivityResult(int resultCode, Intent data) {
+        switch (resultCode) {
+            case ResponseCode.REGISTER_SUCCESSFUL:
+                // TODO: Feed Fragment 에 유저 데이터 전달
+                String token = data.getStringExtra("token");
+                User user = UserUtils.parseUserIntent(data);
+                Log.i("MainActivity", "Register 성공 - nickName: " + user.getNickName());
+                break;
+            default:
+                Log.e("MainActivity", "Register 실패");
+                break;
+        }
+    }
+
 
     public void GetPermission() {
         LinearLayout mLayout = findViewById(R.id.main_layout);
@@ -132,6 +156,7 @@ public class MainActivity extends AppCompatActivity
         int cameraPermission = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[3]);
         int statePermission = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[4]);
         int writeContactPermission = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[5]);
+        int writeExternalStorage = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[6]);
 
 
         grandResults[0] = readExternalStoragePermission;
@@ -140,13 +165,15 @@ public class MainActivity extends AppCompatActivity
         grandResults[3] = cameraPermission;
         grandResults[4] = statePermission;
         grandResults[5] = writeContactPermission;
+        grandResults[6] = writeExternalStorage;
 
         if (!(grandResults[0] == PackageManager.PERMISSION_GRANTED
                 && grandResults[1] == PackageManager.PERMISSION_GRANTED
                 && grandResults[2] == PackageManager.PERMISSION_GRANTED
                 && grandResults[3] == PackageManager.PERMISSION_GRANTED
                 && grandResults[4] == PackageManager.PERMISSION_GRANTED
-                && grandResults[5] == PackageManager.PERMISSION_GRANTED)) {
+                && grandResults[5] == PackageManager.PERMISSION_GRANTED
+                && grandResults[6] == PackageManager.PERMISSION_GRANTED)) {
 
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
@@ -154,7 +181,8 @@ public class MainActivity extends AppCompatActivity
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[2])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[3])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[4])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5]) ) {
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])) {
                 Snackbar.make(mLayout, "이 앱을 실행하려면 외부 저장소, 연락처, 전화 접근 권한이 필요합니다.",
                         Snackbar.LENGTH_INDEFINITE).setAction("확인", new View.OnClickListener() {
                     @Override
@@ -197,7 +225,8 @@ public class MainActivity extends AppCompatActivity
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[2])
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[3])
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[4])
-                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])) {
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])) {
 
                     // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
                     Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",

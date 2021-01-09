@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_y="500pt"
     android:background="#FFFFFF"
-    tools:context="contacts.ContactFragment">
+    tools:context=".ui.contacts.ContactFragment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"

@@ -1,4 +1,4 @@
-package com.example.cs496_week2_client.post;
+package com.example.cs496_week2_client.ui.feed;
 
 import com.example.cs496_week2_client.models.Post;
 

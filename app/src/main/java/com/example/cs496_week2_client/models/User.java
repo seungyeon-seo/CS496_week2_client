@@ -1,13 +1,13 @@
 package com.example.cs496_week2_client.models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class User {
     private String nickName;
     private String id;
-    private List<Post> posts;
+    private ArrayList<String> posts;
 
-    public List<Post> getPosts() {
+    public ArrayList<String> getPosts() {
         return posts;
     }
 
@@ -17,5 +17,17 @@ public class User {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setPosts(ArrayList<String> posts) {
+        this.posts = posts;
     }
 }
