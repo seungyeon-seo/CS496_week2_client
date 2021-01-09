@@ -51,26 +51,27 @@ public class MainActivity extends AppCompatActivity
         // 로그인 액티비티 실행
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
+    }
 
+    private void initViewPager(User user, String token) {
         // TabLayout Initialization
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         // ViewPager Initialization
-        viewPager = (ViewPager2) findViewById(R.id.pager);
-        fgAdapter = new TabPagerAdapter(this, 3);
+        viewPager = findViewById(R.id.pager);
+        fgAdapter = new TabPagerAdapter(this, 3, user, token);
         viewPager.setAdapter(fgAdapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                default:
                     tab.setText("CONTACT");
                     break;
                 case 1:
                     tab.setText("GALLERY");
                     break;
                 case 2:
+                default:
                     tab.setText("FEED");
                     break;
             }
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case RequestCode.LOGIN_REQUEST_CODE:
                 handleLoginActivityResult(resultCode, data);
@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity
     private void handleLoginActivityResult(int resultCode, Intent data) {
         switch (resultCode) {
             case ResponseCode.LOGIN_SUCCESSFUL:
-                // TODO: Feed Fragment 에 유저 데이터 전달
                 String token = data.getStringExtra("token");
                 User user = UserUtils.parseUserIntent(data);
                 Log.i("MainActivity", "Login 성공 - nickName: " + user.getNickName());
+                initViewPager(user, token);
                 break;
             case ResponseCode.REGISTER_REQUIRED: // Register Activity 시작
                 Intent registerIntent = new Intent(this, RegisterActivity.class);
@@ -134,19 +134,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void handleRegisterActivityResult(int resultCode, Intent data) {
-        switch (resultCode) {
-            case ResponseCode.REGISTER_SUCCESSFUL:
-                // TODO: Feed Fragment 에 유저 데이터 전달
-                String token = data.getStringExtra("token");
-                User user = UserUtils.parseUserIntent(data);
-                Log.i("MainActivity", "Register 성공 - nickName: " + user.getNickName());
-                break;
-            default:
-                Log.e("MainActivity", "Register 실패");
-                break;
+        if (resultCode == ResponseCode.REGISTER_SUCCESSFUL) {
+            String token = data.getStringExtra("token");
+            User user = UserUtils.parseUserIntent(data);
+            Log.i("MainActivity", "Register 성공 - nickName: " + user.getNickName());
+            initViewPager(user, token);
+        } else {
+            Log.e("MainActivity", "Register 실패");
         }
     }
-
 
     public void GetPermission() {
         LinearLayout mLayout = findViewById(R.id.main_layout);
@@ -184,14 +180,11 @@ public class MainActivity extends AppCompatActivity
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])) {
                 Snackbar.make(mLayout, "이 앱을 실행하려면 외부 저장소, 연락처, 전화 접근 권한이 필요합니다.",
-                        Snackbar.LENGTH_INDEFINITE).setAction("확인", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // 3-3. 사용자에게 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
-                        ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS,
-                                PERMISSIONS_REQUEST_CODE);
-                    }
-                }).show();
+                        Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> {
+                            // 3-3. 사용자에게 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
+                            ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS,
+                                    PERMISSIONS_REQUEST_CODE);
+                        }).show();
             } else {
                 // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
                 // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
@@ -230,21 +223,11 @@ public class MainActivity extends AppCompatActivity
 
                     // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
                     Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",
-                            Snackbar.LENGTH_INDEFINITE).setAction("확인", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                        }
-                    }).show();
+                            Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> finish()).show();
                 } else {
                     // “다시 묻지 않음”을 사용자가 체크하고 거부를 선택한 경우에는 설정(앱 정보)에서 퍼미션을 허용해야 앱을 사용할 수 있습니다.
                     Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ",
-                            Snackbar.LENGTH_INDEFINITE).setAction("확인", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                        }
-                    }).show();
+                            Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> finish()).show();
                 }
             }
         }

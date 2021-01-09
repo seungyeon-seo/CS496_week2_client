@@ -7,18 +7,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.cs496_week2_client.models.User;
 import com.example.cs496_week2_client.ui.gallery.GalleryFragment;
 import com.example.cs496_week2_client.ui.contacts.ContactFragment;
 import com.example.cs496_week2_client.ui.feed.FeedFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 public class TabPagerAdapter extends FragmentStateAdapter {
     private int tabCount;
+    User user;
+    String token;
 
-    public TabPagerAdapter(FragmentActivity fa, int count) {
+
+    public TabPagerAdapter(FragmentActivity fa, int count, User user,
+                           String token
+    ) {
         super(fa);
         tabCount = count;
+        this.user = user;
+        this.token = token;
     }
 
+    @NotNull
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public Fragment createFragment(int position) {
@@ -29,7 +40,7 @@ public class TabPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return GalleryFragment.newInstance();
             case 2:
-                return FeedFragment.newInstance();
+                return FeedFragment.newInstance(user, token);
         }
     }
 

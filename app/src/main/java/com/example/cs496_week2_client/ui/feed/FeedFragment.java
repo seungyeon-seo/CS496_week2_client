@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
@@ -12,18 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
+import com.example.cs496_week2_client.models.User;
 
 public class FeedFragment extends Fragment {
     Api api;
-    String token;
     RecyclerView posts;
+    User user;
+    String token;
 
-    public static FeedFragment newInstance() {
-        return new FeedFragment();
+    public static FeedFragment newInstance(User user, String token) {
+        return new FeedFragment(user, token);
     }
 
-    public FeedFragment() {
-
+    public FeedFragment(User user, String token) {
+        this.user = user;
+        this.token = token;
     }
 
     @Override
@@ -36,8 +40,15 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        TextView nickName = view.findViewById(R.id.nickname_text);
+        if (user == null) {
+            nickName.setText("로그인 해주세요");
+        }
+        else {
+            nickName.setText(user.getNickName());
+        }
+        return view;
     }
-
 
 }
