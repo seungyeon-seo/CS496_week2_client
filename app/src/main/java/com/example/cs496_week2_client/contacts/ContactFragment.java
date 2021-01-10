@@ -16,7 +16,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.databinding.FragmentContactBinding;
 import com.example.cs496_week2_client.models.ContactModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -39,14 +42,17 @@ import retrofit2.Response;
 
 public class ContactFragment extends Fragment {
     View view;
-    public ArrayList<Contact> contacts;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ContactAdapter adapter;
     LayoutInflater initInflater;
     ViewGroup initContainer;
     Bundle initSavedInstanceState;
     ContactDataService dataService;
+    // For view model
+    ContactViewModel viewModel;
+    ContactViewModelFactory viewModelFactory;
+    FragmentContactBinding binding;
 
 
     public ContactFragment() {
@@ -73,9 +79,26 @@ public class ContactFragment extends Fragment {
         if (container != null) initContainer = container;
         if (savedInstanceState != null) initSavedInstanceState = savedInstanceState;
 
+        // Init View Model Variables
+        viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity());
+
+        viewModel = new ViewModelProvider(getActivity(), viewModelFactory).get(ContactViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setContactViewModel(viewModel);
+
+
+        binding.textView.setText("아직 아무것도 안함");
+        viewModel.message.observe(getViewLifecycleOwner(), (String str) -> {
+            Log.i("ContactFragment", "in observe function "+ str);
+            binding.textView.setText(str);
+        });
+
         // RecyclerView Initialization
-        view = inflater.inflate(R.layout.fragment_contact, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        view = binding.getRoot();
+//        view = inflater.inflate(R.layout.fragment_contact, container, false);
+//        recyclerView = view.findViewById(R.id.recycler);
+        recyclerView = binding.recycler;
         recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(recyclerView.getContext(),
@@ -87,16 +110,21 @@ public class ContactFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.scrollToPosition(0);
 
-        // Init contact list
-        contacts = getContacts();
-
         // Set Adapter
-        adapter = new ContactAdapter(contacts, this);
+        adapter = new ContactAdapter(binding.getContactViewModel().contacts.getValue(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        viewModel.contacts.observe(getViewLifecycleOwner(), (ArrayList<Contact> data)-> {
+            Log.i("ContactFragment", "in observe function "+data.size());
+            if (data != null) {
+                adapter.setData(data);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         // Init SearchView
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        SearchView searchView = binding.searchView;
+//        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -112,7 +140,8 @@ public class ContactFragment extends Fragment {
         });
 
         // Init createButton
-        FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
+//        FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
+        FloatingActionButton createButton = binding.phoneAddButton;
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,18 +151,22 @@ public class ContactFragment extends Fragment {
         });
 
         // Init synchButton
-        ImageButton synchButton = view.findViewById(R.id.synchButton);
+//        ImageButton synchButton = view.findViewById(R.id.synchButton);
+        ImageButton synchButton = binding.synchButton;
         synchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < contacts.size(); i++) {
-                    postContact(contacts.get(i));
+                for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
+                    postContact(viewModel.contacts.getValue().get(i));
                 }
                 Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
             }
         });
 
-        return view;
+        // Init contacts
+//        viewModel.getContacts();
+
+        return binding.getRoot();
     }
 
     @Override
@@ -153,95 +186,6 @@ public class ContactFragment extends Fragment {
             }
         }
 
-    }
-
-    private ArrayList<Contact> getContacts() {
-        LinkedHashSet<Contact> contactSet = getContactsDevice();
-        Log.i("GetContacts", "Done from device");
-        LinkedHashSet<Contact> serverSet = getContactsServer();
-        Log.i("GetContacts", "Done from server");
-        contactSet.addAll(serverSet);
-
-        contacts = new ArrayList<Contact>(contactSet);
-
-        return contacts;
-    }
-
-    private LinkedHashSet<Contact> getContactsDevice() {
-        // Init Cursor
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection = new String[] {
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Photo.PHOTO_URI,
-                ContactsContract.CommonDataKinds.Phone._ID,
-                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY
-        };
-        String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-        Cursor cursor = requireActivity().getContentResolver().query(
-                uri, projection, null, null, sortOrder);
-
-        // Read Data
-        LinkedHashSet<Contact> hasList = new LinkedHashSet<Contact>();
-
-        if (cursor.moveToFirst()) {
-            do {
-                String phone = cursor.getString(0);
-                String fullName = cursor.getString(1);
-                String image = cursor.getString(2);
-                long person = cursor.getLong(3);
-                String lookup = cursor.getString(4);
-
-                Contact contact = new Contact(phone, fullName, image, person, lookup);
-
-                if (contact.isStartWith("01")) {
-                    hasList.add(contact);
-                    Log.d("<<CONTACTS>>", contact.getMsg());
-                }
-
-            } while (cursor.moveToNext());
-        }
-        if (cursor != null) {
-            cursor.close();
-        }
-        return hasList;
-    }
-
-    private LinkedHashSet<Contact> getContactsServer() {
-        LinkedHashSet<Contact> hashSet = new LinkedHashSet<Contact>();
-        Log.i("GetContactServer", "Start");
-        dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
-
-            @Override
-            public void onResponse(Call<ArrayList<ContactModel>> call,
-                                   Response<ArrayList<ContactModel>> response) {
-                Log.i("GetContactServer", "Response");
-                if (response.isSuccessful()) {
-                    ArrayList<ContactModel> contactModels = response.body();
-                    for (int i = 0; i < contactModels.size(); i++) {
-                        Contact ct = new Contact(contactModels.get(i).getPhone(),
-                                contactModels.get(i).getFullName(),
-                                contactModels.get(i).getImage(),
-                                Long.parseLong(contactModels.get(i).getPersonId()),
-                                contactModels.get(i).getLookup() );
-                        hashSet.add(ct);
-                    }
-                    Log.i("GetContactServer", "Success");
-                }
-                else try {
-                    throw new Exception("response is not successful");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<ContactModel>> call, Throwable t) {
-                Log.d("GetContactServer", "Failed to get data");
-                t.printStackTrace();
-            }
-        });
-        return hashSet;
     }
 
     private void postContact(Contact contact) {
@@ -277,8 +221,8 @@ public class ContactFragment extends Fragment {
     }
 
     private Contact findContact(String name) {
-        for (int i = 0; i < contacts.size(); i++) {
-            Contact ct = contacts.get(i);
+        for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
+            Contact ct = viewModel.contacts.getValue().get(i);
             if (ct.fullName == name)
                 return ct;
         }

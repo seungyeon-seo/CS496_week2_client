@@ -1,50 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_y="500pt"
-    android:background="#FFFFFF"
-    tools:context="contacts.ContactFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="305dp"
-        android:layout_height="55dp"
-        android:background="#FFFFFF" />
+    <data>
+        <variable
+            name="contactViewModel"
+            type="com.example.cs496_week2_client.contacts.ContactViewModel" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:scrollbars="horizontal" />
+        android:layout_height="match_parent"
+        android:layout_y="500pt"
+        android:background="#FFFFFF"
+        tools:context="contacts.ContactFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/phone_add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="295dp"
-        android:layout_marginBottom="15dp"
-        android:clickable="true"
-        android:backgroundTint="@color/fab_color"
-        app:borderWidth="0dp"
-        android:src="@drawable/ic_baseline_add_24"
-        app:layout_anchor="@id/recycler"
-        app:layout_anchorGravity="bottom|right|end" />
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="305dp"
+            android:layout_height="55dp"
+            android:background="#FFFFFF" />
 
-    <ImageButton
-        android:id="@+id/synchButton"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="305dp"
-        android:src="@drawable/synch"
-        android:scaleType="fitCenter"
-        android:tint="@color/white"
-        android:background="@color/fab_color"
-        android:fontFamily="@font/nanumsqure_r"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:scrollbars="horizontal" />
 
-</FrameLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/phone_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="295dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:backgroundTint="@color/fab_color"
+            app:borderWidth="0dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_anchor="@id/recycler"
+            app:layout_anchorGravity="bottom|right|end" />
+
+        <ImageButton
+            android:id="@+id/synchButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="305dp"
+            android:src="@drawable/synch"
+            android:scaleType="fitCenter"
+            android:tint="@color/white"
+            android:background="@color/fab_color"
+            android:fontFamily="@font/nanumsqure_r"
+            />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+    </FrameLayout>
+
+</layout>

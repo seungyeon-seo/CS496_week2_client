@@ -35,6 +35,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         return mData.size();
     }
 
+    public void setData(ArrayList<Contact> data) {
+        mData = data;
+        // TODO notifyDataset change나 DiffUtils 로 최적화
+    }
+
     // ViewHolder: store item view
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
