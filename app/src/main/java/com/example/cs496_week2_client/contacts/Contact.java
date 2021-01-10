@@ -3,7 +3,7 @@ package com.example.cs496_week2_client.contacts;
 import android.net.Uri;
 
 public class Contact {
-    String phone, fullName, lookup;
+    String phone, fullName, lookup = null;
     long personId;
     String image = null;
 

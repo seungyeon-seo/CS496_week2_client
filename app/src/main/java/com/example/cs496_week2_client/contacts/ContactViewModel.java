@@ -16,6 +16,7 @@ import com.example.cs496_week2_client.models.ContactModel;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import retrofit2.Call;
@@ -24,8 +25,6 @@ import retrofit2.Response;
 
 public class ContactViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Contact>> contacts;
-    public MutableLiveData<String> message;
-    private int called=0;
     Activity activity;
     ContactDataService dataService;
 
@@ -34,7 +33,6 @@ public class ContactViewModel extends ViewModel {
         dataService = new ContactDataService();
         contacts = new MutableLiveData<ArrayList<Contact>>();
         contacts.setValue(new ArrayList<Contact>());
-        message = new MutableLiveData<String>();
         getContacts();
     }
 
@@ -43,8 +41,6 @@ public class ContactViewModel extends ViewModel {
         Log.i("GetContacts", "Done from device");
         getContactsServer();
         Log.i("GetContacts", "Done from server");
-        called = called + 1;
-        message.setValue(String.valueOf(called));
     }
 
     private void getContactsDevice() {
@@ -87,7 +83,6 @@ public class ContactViewModel extends ViewModel {
     }
 
     private void getContactsServer() {
-        Log.i("GetContactServer", "Start");
         dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ContactModel>> call,
@@ -104,13 +99,10 @@ public class ContactViewModel extends ViewModel {
                                 contactModels.get(i).getLookup() );
                         if(!isContained(ct))
                         {
-                            Log.i("GetContactServer", ct.fullName+" is not contained :"+contacts.getValue().size());
                             contact.add(ct);
-                            Log.i("GetContactServer", ct.fullName+" is added : "+contacts.getValue().size());
                         }
                     }
                     contacts.setValue(contact);
-                    Log.i("GetContactServer", "Success");
                 }
                 else try {
                     throw new Exception("response is not successful");
@@ -124,7 +116,39 @@ public class ContactViewModel extends ViewModel {
                 t.printStackTrace();
             }
         });
+    }
 
+    public void postContact(Contact contact) {
+        Log.i("PostContact", "start function about "+contact.fullName);
+        // Set input for server
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("fullName", contact.fullName);
+        input.put("phone", contact.phone);
+        input.put("lookup", contact.lookup);
+        input.put("personId", Long.toString(contact.personId));
+        input.put("image", contact.image);
+
+        // Init PUT function
+        dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
+            @Override
+            public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
+                Log.d("InsertContact", "on Response");
+                if (!response.isSuccessful()) {
+                    Log.i("InsertContact", "response is not successful");
+                    return;
+                }
+                ContactModel ct = response.body();
+                if (ct != null) {
+                    Log.d("InsertContact", "success "+response.message());
+                } else Log.d("InsertContact", "contact is null");
+            }
+
+            @Override
+            public void onFailure(Call<ContactModel> call, Throwable t) {
+                Log.e("InsertContact", "Fail to insert contact " + contact.fullName);
+                t.printStackTrace();
+            }
+        });
     }
 
     private boolean isContained(Contact ct) {

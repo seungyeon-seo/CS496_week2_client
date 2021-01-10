@@ -2,16 +2,11 @@ package com.example.cs496_week2_client.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.fonts.FontVariationAxis;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -27,18 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.databinding.FragmentContactBinding;
-import com.example.cs496_week2_client.models.ContactModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ContactFragment extends Fragment {
     View view;
@@ -49,6 +35,7 @@ public class ContactFragment extends Fragment {
     ViewGroup initContainer;
     Bundle initSavedInstanceState;
     ContactDataService dataService;
+
     // For view model
     ContactViewModel viewModel;
     ContactViewModelFactory viewModelFactory;
@@ -87,17 +74,8 @@ public class ContactFragment extends Fragment {
         binding.setLifecycleOwner(this);
         binding.setContactViewModel(viewModel);
 
-
-        binding.textView.setText("아직 아무것도 안함");
-        viewModel.message.observe(getViewLifecycleOwner(), (String str) -> {
-            Log.i("ContactFragment", "in observe function "+ str);
-            binding.textView.setText(str);
-        });
-
         // RecyclerView Initialization
         view = binding.getRoot();
-//        view = inflater.inflate(R.layout.fragment_contact, container, false);
-//        recyclerView = view.findViewById(R.id.recycler);
         recyclerView = binding.recycler;
         recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration =
@@ -124,7 +102,6 @@ public class ContactFragment extends Fragment {
 
         // Init SearchView
         SearchView searchView = binding.searchView;
-//        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -140,7 +117,6 @@ public class ContactFragment extends Fragment {
         });
 
         // Init createButton
-//        FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
         FloatingActionButton createButton = binding.phoneAddButton;
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,21 +127,16 @@ public class ContactFragment extends Fragment {
         });
 
         // Init synchButton
-//        ImageButton synchButton = view.findViewById(R.id.synchButton);
         ImageButton synchButton = binding.synchButton;
         synchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
-                    postContact(viewModel.contacts.getValue().get(i));
+                    viewModel.postContact(viewModel.contacts.getValue().get(i));
                 }
                 Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Init contacts
-//        viewModel.getContacts();
-
         return binding.getRoot();
     }
 
@@ -179,45 +150,14 @@ public class ContactFragment extends Fragment {
                 case 10001:
                     main.setViewPager(0);
                     Bundle bundle = data.getExtras();
+                    viewModel.getContacts();
                     Contact ct = findContact(bundle.getString("fullName"));
-                    if (ct != null) postContact(ct);
+                    if (ct != null) viewModel.postContact(ct);
                     else Log.e("Contact Creation", "Fail to create contact");
                     break;
             }
         }
 
-    }
-
-    private void postContact(Contact contact) {
-        // Set input for server
-        HashMap<String, Object> input = new HashMap<>();
-        input.put("fullName", contact.fullName);
-        input.put("phone", contact.phone);
-        input.put("lookup", contact.lookup);
-        input.put("personId", Long.toString(contact.personId));
-        input.put("image", contact.image);
-
-        // Init PUT function
-        dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
-            @Override
-            public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
-                Log.d("InsertContact", "on Response");
-                if (!response.isSuccessful()) {
-                    Log.i("InsertContact", "response is not successful");
-                    return;
-                }
-                ContactModel ct = response.body();
-                if (ct != null) {
-                    Log.d("InsertContact", "success "+response.message());
-                } else Log.d("InsertContact", "contact is null");
-            }
-
-            @Override
-            public void onFailure(Call<ContactModel> call, Throwable t) {
-                Log.e("InsertContact", "Fail to insert contact " + contact.fullName);
-                t.printStackTrace();
-            }
-        });
     }
 
     private Contact findContact(String name) {

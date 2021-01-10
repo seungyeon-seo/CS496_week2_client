@@ -2,6 +2,8 @@ package com.example.cs496_week2_client.contacts;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.Bundle;
@@ -85,6 +87,14 @@ public class CreateActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(getApplicationContext(), "저장되었습니다", Toast.LENGTH_LONG).show();
+
+                    // Insert contact to phone
+                    ContentResolver cr = getContentResolver();
+                    ContentValues cv = new ContentValues();
+                    cv.put(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, name);
+                    cv.put(ContactsContract.CommonDataKinds.Phone.NUMBER, number);
+                    cv.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+                    cr.insert(ContactsContract.RawContacts.CONTENT_URI, cv);
 
                     // Set intent
                     Intent intent = getIntent();
