@@ -70,7 +70,6 @@ public class ContactFragment extends Fragment {
 
         // Init View Model Variables
         viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity());
-
         viewModel = new ViewModelProvider(getActivity(), viewModelFactory).get(ContactViewModel.class);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
         binding.setLifecycleOwner(this);
