@@ -1,6 +1,7 @@
 package com.example.cs496_week2_client.util;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.example.cs496_week2_client.models.Post;
 import com.example.cs496_week2_client.models.User;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 public class UserUtils {
     public static Intent getUserIntent(String userId, String nickname, ArrayList<String> posts, String token) {
         Intent intent = new Intent();
-        // TODO response 객체로부터 id, nickname, posts 읽어오기
         intent.putExtra("userId", userId);
         intent.putExtra("nickname", nickname);
         intent.putExtra("posts", posts);
@@ -28,6 +28,31 @@ public class UserUtils {
         user.setNickName(nickname);
         user.setPosts(posts);
         return user;
+    }
+
+    public static Bundle getUserBundle(User user, String token) {
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", user.getId());
+        bundle.putString("nickname", user.getNickName());
+        bundle.putStringArrayList("posts", user.getPosts());
+        bundle.putString("token", token);
+        return bundle;
+    }
+
+    public static User parseUserBundleGetUser(Bundle bundle) {
+        String userId = bundle.getString("userId");
+        String nickname = bundle.getString("nickname");
+        ArrayList<String> posts = bundle.getStringArrayList("posts");
+
+        User user = new User();
+        user.setId(userId);
+        user.setNickName(nickname);
+        user.setPosts(posts);
+        return user;
+    }
+
+    public static String parseUserBundleGetToken (Bundle bundle) {
+       return bundle.getString("token");
     }
 
 }

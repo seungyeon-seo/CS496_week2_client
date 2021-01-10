@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity
         GetPermission();
         onRequestPermissionsResult(PERMISSIONS_REQUEST_CODE, REQUIRED_PERMISSIONS, grandResults);
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // 로그인 액티비티 실행
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
+        super.onCreate(savedInstanceState);
     }
 
     private void initViewPager(User user, String token) {

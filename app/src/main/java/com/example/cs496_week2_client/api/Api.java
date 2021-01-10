@@ -3,6 +3,8 @@ package com.example.cs496_week2_client.api;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import com.example.cs496_week2_client.ui.gallery.GalleryService;
 import com.example.cs496_week2_client.ui.login.UserService;
 import com.example.cs496_week2_client.ui.feed.PostService;
 
@@ -14,6 +16,8 @@ public class Api {
     // retrofit 을 이용해서 만드는 서비스 (서버의 routes 에 해당)
     private com.example.cs496_week2_client.ui.feed.PostService PostService; // 게시글 CRUD
     private UserService UserService; // 로그인 등 인증 관련
+    private GalleryService GalleryService; // 이미지 업로드 등 갤러리 관련
+
 
     public static Api getInstance() {
         if (instance == null) {
@@ -36,8 +40,9 @@ public class Api {
                         .build();
 
         // 서비스 초기화
-//        this.PostService = new PostService(retrofitClient);
+        this.PostService = new PostService(retrofitClient);
         this.UserService = new UserService(retrofitClient);
+        this.GalleryService = new GalleryService(retrofitClient);
     }
 
     public PostService getPostService() {
@@ -46,5 +51,9 @@ public class Api {
 
     public UserService getUserService() {
         return this.UserService;
+    }
+
+    public com.example.cs496_week2_client.ui.gallery.GalleryService getGalleryService() {
+        return GalleryService;
     }
 }

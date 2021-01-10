@@ -4,14 +4,16 @@
     package="com.example.cs496_week2_client">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -26,11 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS496_week2_client"
         tools:targetApi="n">
-
+        <activity
+            android:name=".ui.feed.UploadImageActivity"
+            android:label="이미지 업로드" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="로그인" />
-
         <activity
             android:name=".ui.login.RegisterActivity"
             android:label="회원가입" />
@@ -41,9 +44,7 @@
 
         <activity
             android:name=".ui.gallery.ViewImage"
-            android:label="이미지 상세보기"
-            />
-
+            android:label="이미지 상세보기" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,11 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.contacts.CreateActivity"
             android:label="연락처 추가" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -66,7 +65,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
