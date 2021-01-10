@@ -2,6 +2,7 @@ package com.example.cs496_week2_client.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -24,7 +26,9 @@ import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.databinding.FragmentContactBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ContactFragment extends Fragment {
     View view;
@@ -140,6 +144,7 @@ public class ContactFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

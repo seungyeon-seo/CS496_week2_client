@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +18,8 @@ import com.example.cs496_week2_client.models.ContactModel;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -36,6 +40,7 @@ public class ContactViewModel extends ViewModel {
         getContacts();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void getContacts() {
         getContactsDevice();
         Log.i("GetContacts", "Done from device");
@@ -43,6 +48,7 @@ public class ContactViewModel extends ViewModel {
         Log.i("GetContacts", "Done from server");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void getContactsDevice() {
         // Init Cursor
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
@@ -68,13 +74,22 @@ public class ContactViewModel extends ViewModel {
                 String lookup = cursor.getString(4);
 
                 Contact contact = new Contact(phone, fullName, image, person, lookup);
-
+                ArrayList<Contact> list = contacts.getValue();
                 if (contact.isStartWith("01")) {
                     if(!isContained(contact))
-                        contacts.getValue().add(contact);
+                        list.add(contact);
+                    Collections.sort(list);
+//                    list.sort(new Comparator<Contact>() {
+//                        @Override
+//                        public int compare(Contact o1, Contact o2) {
+//                            if (o1.fullName.compareTo(o2.fullName) > 0)
+//                                return 1;
+//                            return 0;
+//                        }
+//                    });
                     Log.d("<<CONTACTS>>", contact.getMsg());
                 }
-
+                contacts.setValue(list);
             } while (cursor.moveToNext());
         }
         if (cursor != null) {
@@ -84,6 +99,7 @@ public class ContactViewModel extends ViewModel {
 
     private void getContactsServer() {
         dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<ArrayList<ContactModel>> call,
                                    Response<ArrayList<ContactModel>> response) {
@@ -102,6 +118,15 @@ public class ContactViewModel extends ViewModel {
                             contact.add(ct);
                         }
                     }
+                    Collections.sort(contact);
+//                    contact.sort(new Comparator<Contact>() {
+//                        @Override
+//                        public int compare(Contact o1, Contact o2) {
+//                            if (o1.fullName.compareTo(o2.fullName) > 0)
+//                                return 1;
+//                            return 0;
+//                        }
+//                    });
                     contacts.setValue(contact);
                 }
                 else try {
@@ -158,6 +183,8 @@ public class ContactViewModel extends ViewModel {
         }
         return false;
     }
+
+
 }
 
 class ContactViewModelFactory implements ViewModelProvider.Factory {
