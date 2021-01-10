@@ -26,4 +26,11 @@
     <color name="fab_color">#93888C</color>
     <color name="text_color">#403835</color>
 
+    <color name="colorPrimary">#E8C2C1</color>
+    <color name="colorPrimaryDark">#93888C</color>
+    <color name="colorAccent">#f67e7d</color>
+    <color name="colorAccentLight">#ffb997</color>
+    <color name="zircon">#e0e6e4</color>
+
+
 </resources>

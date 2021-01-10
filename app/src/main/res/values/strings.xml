@@ -10,10 +10,10 @@
     <string name="facebook_app_id">740457126906468</string>
     <string name="fb_login_protocol_scheme">fb740457126906468</string>
     <string name="facebook_login">페이스북 로그인</string>
-    <string name="nickname_hint">앱에서 사용할 닉네임을 입력해주세요!</string>
+    <string name="nickname_hint">이름</string>
 
     <string name="nickname_submit_button">시작하기</string>
-    <string name="nickname_submit_button_desc">앱에서 사용할 닉네임 제출 버튼</string>
+    <string name="nickname_submit_button_desc">제출 버튼</string>
 
     <string name="title_activity_feed">FeedActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
@@ -28,7 +28,21 @@
     <string name="save">저장</string>
     <string name="camera_button">camera FAB</string>
     <string name="item_image_src">image of item_image</string>
-    <string name="new_post_button">new_post_button</string>
+    <string name="new_status_button">상태 갱신 버튼</string>
     <string name="image_preview_text">선택한 이미지 파일 미리보기</string>
     <string name="image_select_button_text">프로필 사진 고르기</string>
+    <string name="code">초대 코드</string>
+    <string name="prompt_nickname">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="login">Login</string>
+    <string name="create_new">초대 코드가 없다면?</string>
+    <string name="not_register">Not Register?</string>
+    <string name="register">Register</string>
+    <string name="name_error">Please enter your name</string>
+    <string name="phone_error">Please enter your phone number</string>
+    <string name="email_error">Please enter your email address</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="password_error">Please enter a password</string>
+    <string name="error_invalid_password">Please enter a minimum password of 6 characters</string>
+
 </resources>

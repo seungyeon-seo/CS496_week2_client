@@ -27,9 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS496_week2_client"
         tools:targetApi="n">
-        <activity
-            android:name=".ui.feed.UploadImageActivity"
-            android:label="이미지 업로드" />
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="로그인" />
