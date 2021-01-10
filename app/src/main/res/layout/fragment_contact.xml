@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_y="500pt"
-    android:background="#FFFFFF"
-    tools:context=".ui.contacts.ContactFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#FFFFFF" />
+    <data>
+        <variable
+            name="contactViewModel"
+            type="com.example.cs496_week2_client.ui.contacts.ContactViewModel" />
+    </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:scrollbars="horizontal" />
+        android:layout_y="500pt"
+        android:background="#FFFFFF"
+        tools:context="contacts.ContactFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/phone_add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="70dp"
-        android:clickable="true"
-        android:backgroundTint="@color/fab_color"
-        app:borderWidth="0dp"
-        android:src="@drawable/ic_baseline_add_24"
-        app:layout_anchor="@id/recycler"
-        app:layout_anchorGravity="bottom|right|end"
-        android:focusable="true" />
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="305dp"
+            android:layout_height="55dp"
+            android:background="#FFFFFF" />
 
-    <ImageButton
-        android:id="@+id/addButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom|left"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="635dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/addbutton"
-        android:scaleType="fitCenter"
-        android:padding="0sp"
-        android:background="#00000000"
-        android:visibility="visible"
-        tools:ignore="ContentDescription,RtlHardcoded" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:scrollbars="horizontal" />
 
-</FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/phone_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="295dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="true"
+            android:backgroundTint="@color/fab_color"
+            app:borderWidth="0dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_anchor="@id/recycler"
+            app:layout_anchorGravity="bottom|right|end"
+            android:focusable="true" />
+
+        <ImageButton
+            android:id="@+id/synchButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="305dp"
+            android:src="@drawable/synch"
+            android:scaleType="fitCenter"
+            android:tint="@color/white"
+            android:background="@color/fab_color"
+            android:fontFamily="@font/nanumsqure_r"
+            />
+    </FrameLayout>
+</layout>

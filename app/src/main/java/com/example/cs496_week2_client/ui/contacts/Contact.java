@@ -1,17 +1,16 @@
 package com.example.cs496_week2_client.ui.contacts;
 
-import android.net.Uri;
+import android.util.Log;
 
-public class Contact {
-    String phone, fullName, lookup;
+public class Contact implements Comparable<Contact> {
+    String phone, fullName, lookup = null;
     long personId;
-    Uri image = null;
-    int id;
+    String image = null;
 
     public Contact(String ph, String fn, String bytes, long pid, String key) {
         phone = ph;
         fullName = fn;
-        if (bytes != null)  image = Uri.parse(bytes);
+        if (bytes != null)  image = bytes;
         personId = pid;
         lookup = key;
     }
@@ -23,7 +22,12 @@ public class Contact {
     public String getMsg() {
         return ("name=" + fullName + ", phone=" + phone);
     }
-    public void setId(int i) {
-        id = i;
+
+    @Override
+    public int compareTo(Contact o) {
+        if (this.fullName.compareTo(o.fullName) > 0)
+            return 1;
+        Log.i("Contact", "Compare result: 0");
+        return 0;
     }
 }

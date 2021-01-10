@@ -9,7 +9,7 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/contact_image_default"
+        android:src="@drawable/image_default"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="10dp"
         tools:ignore="MissingConstraints" />
@@ -47,12 +47,12 @@
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:background="#77B2C5"
+        android:background="#00000000"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/numTextView"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="5dp"
-        app:srcCompat="@android:drawable/stat_sys_phone_call"
+        android:src="@drawable/callbutton"
         tools:ignore="MissingConstraints" />
 
 

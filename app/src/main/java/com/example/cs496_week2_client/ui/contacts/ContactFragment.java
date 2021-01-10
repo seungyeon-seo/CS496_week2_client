@@ -2,18 +2,20 @@ package com.example.cs496_week2_client.ui.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,20 +23,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.databinding.FragmentContactBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 public class ContactFragment extends Fragment {
     View view;
-    public ArrayList<Contact> contacts;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ContactAdapter adapter;
-    private LayoutInflater initInflater;
-    private ViewGroup initContainer;
-    private Bundle initSavedInstanceState;
+    LayoutInflater initInflater;
+    ViewGroup initContainer;
+    Bundle initSavedInstanceState;
+    ContactDataService dataService;
+
+    // For view model
+    ContactViewModel viewModel;
+    ContactViewModelFactory viewModelFactory;
+    FragmentContactBinding binding;
+
 
     public ContactFragment() {
         // Required empty public constructor
@@ -49,6 +57,7 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dataService = new ContactDataService();
     }
 
     @Override
@@ -59,9 +68,17 @@ public class ContactFragment extends Fragment {
         if (container != null) initContainer = container;
         if (savedInstanceState != null) initSavedInstanceState = savedInstanceState;
 
+        // Init View Model Variables
+        viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity());
+
+        viewModel = new ViewModelProvider(getActivity(), viewModelFactory).get(ContactViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setContactViewModel(viewModel);
+
         // RecyclerView Initialization
-        view = inflater.inflate(R.layout.fragment_contact, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        view = binding.getRoot();
+        recyclerView = binding.recycler;
         recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(recyclerView.getContext(),
@@ -73,16 +90,20 @@ public class ContactFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.scrollToPosition(0);
 
-        // Init contact list
-        contacts = getContacts();
-
         // Set Adapter
-        adapter = new ContactAdapter(contacts, this);
+        adapter = new ContactAdapter(binding.getContactViewModel().contacts.getValue(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        viewModel.contacts.observe(getViewLifecycleOwner(), (ArrayList<Contact> data)-> {
+            Log.i("ContactFragment", "in observe function "+data.size());
+            if (data != null) {
+                adapter.setData(data);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         // Init SearchView
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        SearchView searchView = binding.searchView;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -97,19 +118,8 @@ public class ContactFragment extends Fragment {
             }
         });
 
-        // Init addButton
-        ImageButton addButton = (ImageButton) view.findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_INSERT);
-                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                startActivityForResult(intent, 10000);
-            }
-        });
-
         // Init createButton
-        FloatingActionButton createButton = view.findViewById(R.id.phone_add_button);
+        FloatingActionButton createButton = binding.phoneAddButton;
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,75 +128,47 @@ public class ContactFragment extends Fragment {
             }
         });
 
-        return view;
+        // Init synchButton
+        ImageButton synchButton = binding.synchButton;
+        synchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
+                    viewModel.postContact(viewModel.contacts.getValue().get(i));
+                }
+                Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             MainActivity main = (MainActivity) getActivity();
             switch (requestCode) {
-                //addButton click
-                case 10000:
-                    main.setViewPager(0);
-                    break;
-
                 //createButton click
                 case 10001:
                     main.setViewPager(0);
-                    //onCreateView(initInflater, initContainer, initSavedInstanceState);
+                    Bundle bundle = data.getExtras();
+                    viewModel.getContacts();
+                    Contact ct = findContact(bundle.getString("fullName"));
+                    if (ct != null) viewModel.postContact(ct);
+                    else Log.e("Contact Creation", "Fail to create contact");
                     break;
             }
         }
 
     }
 
-    private ArrayList<Contact> getContacts() {
-        // Init Cursor
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection = new String[] {
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Photo.PHOTO_URI,
-                ContactsContract.CommonDataKinds.Phone._ID,
-                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY
-        };
-        String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-        Cursor cursor = requireActivity().getContentResolver().query(
-                uri, projection, null, null, sortOrder);
-
-        // Read Data
-        LinkedHashSet<Contact> hasList = new LinkedHashSet<Contact>();
-        ArrayList<Contact> contacts;
-
-        if (cursor.moveToFirst()) {
-            do {
-                String phone = cursor.getString(0);
-                String fullName = cursor.getString(1);
-                String image = cursor.getString(2);
-                long person = cursor.getLong(3);
-                String lookup = cursor.getString(4);
-
-                Contact contact = new Contact(phone, fullName, image, person, lookup);
-
-                if (contact.isStartWith("01")) {
-                    hasList.add(contact);
-                    Log.d("<<CONTACTS>>", contact.getMsg());
-                }
-
-            } while (cursor.moveToNext());
+    private Contact findContact(String name) {
+        for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
+            Contact ct = viewModel.contacts.getValue().get(i);
+            if (ct.fullName == name)
+                return ct;
         }
-
-        contacts = new ArrayList<Contact>(hasList);
-        for (int i = 0; i < contacts.size(); i++) {
-            contacts.get(i).setId(i);
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-        return contacts;
+        return null;
     }
 }
