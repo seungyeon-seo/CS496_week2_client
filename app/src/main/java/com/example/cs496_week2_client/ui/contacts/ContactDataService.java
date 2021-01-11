@@ -12,6 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class ContactDataService {
     private String BASE_URL = "http://192.249.18.224/test/";
@@ -40,8 +42,8 @@ interface InsertAPI{
 }
 
 interface UpdateAPI{
-//    @PUT("contact/update")
-//    Call<ContactModel> updateContact(@Body HashMap<String, Object> param);
+    @PUT("contact/update/status")
+    Call<ContactModel> setStatus(@Body HashMap<String, Object> param);
 }
 
 interface DeleteAPI{

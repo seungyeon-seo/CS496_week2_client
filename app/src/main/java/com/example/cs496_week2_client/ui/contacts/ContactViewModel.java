@@ -133,7 +133,7 @@ public class ContactViewModel extends ViewModel {
         input.put("image", contact.image);
         input.put("groupId", contact.groupId);
         input.put("status", contact.status);
-        input.put("location", contact.location.getProvider());
+        if(contact.location != null) input.put("location", contact.location.getProvider());
 
         // Init PUT function
         dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
@@ -158,6 +158,36 @@ public class ContactViewModel extends ViewModel {
         });
     }
 
+    public void setStatus(Contact contact, int status) {
+        Log.i("setStatus", "start function about "+contact.fullName);
+
+        // Set input for server
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("phone", contact.phone);
+        input.put("status", status);
+
+        dataService.update.setStatus(input).enqueue(new Callback<ContactModel>() {
+            @Override
+            public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
+                Log.d("SetStatus", "on Response");
+                if (!response.isSuccessful()) {
+                    Log.d("SetStatus", "response is not successful");
+                    return;
+                }
+                ContactModel ct = response.body();
+                if (ct != null) {
+                    Log.d("SetStatus", "success "+response.message());
+                } else Log.d("SetStatus", "contact is null");
+            }
+
+            @Override
+            public void onFailure(Call<ContactModel> call, Throwable t) {
+                Log.e("SetStatus", "Fail to set status " + contact.fullName);
+                t.printStackTrace();
+            }
+        });
+    }
+
     private boolean isContained(Contact ct) {
         for (int i = 0; i < contacts.getValue().size(); i++) {
             if (contacts.getValue().get(i).phone.equals(ct.phone))
@@ -165,7 +195,6 @@ public class ContactViewModel extends ViewModel {
         }
         return false;
     }
-
 
 }
 
