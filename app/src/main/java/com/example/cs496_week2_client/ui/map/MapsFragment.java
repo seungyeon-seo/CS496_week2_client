@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.models.MemLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,9 +27,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MapsFragment extends Fragment {
     Location myLocation;
     FusedLocationProviderClient mFusedLocationClient;
+    LocationDataService dataService;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -54,6 +63,9 @@ public class MapsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
+        dataService = new LocationDataService();
+        myLocation = new Location(LocationManager.GPS_PROVIDER);
     }
 
     @Nullable
@@ -77,7 +89,6 @@ public class MapsFragment extends Fragment {
     }
 
     private void getMyLocation(GoogleMap map) {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -86,15 +97,56 @@ public class MapsFragment extends Fragment {
             @Override
             public void onSuccess(Location location) {
                 MarkerOptions markerOptions = new MarkerOptions();
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                Log.i("getMyLocation", String.valueOf(location.getLatitude())+" "+String.valueOf(location.getLongitude()));
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                LatLng latLng = new LatLng(latitude, longitude);
+                Log.i("getMyLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
                 markerOptions.position(latLng);
                 markerOptions.title("내 위치");
                 map.addMarker(markerOptions);
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
+                myLocation = location;
+                //uploadLocation();
+                //getMemberLocation(map);
             }
         });
+    }
 
+    private void uploadLocation() {
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("location", myLocation.getProvider());
+        input.put("name", "제니"); //TODO : user의 이름 받아와서 넣어주기
+        dataService.update.setLocation(input).enqueue(new Callback<MemLocation>() {
+            @Override
+            public void onResponse(Call<MemLocation> call, Response<MemLocation> response) {
+                if (!response.isSuccessful()) {
+                    Log.i("SetLocation", "response is not successful");
+                    return;
+                }
+                MemLocation memLocation = response.body();
+                if (memLocation != null) {
+                    Log.i("SetLocation", "success " + response.message());
+                }
+                else Log.i("SetLocation", "memlocation is null");
+            }
 
+            @Override
+            public void onFailure(Call<MemLocation> call, Throwable t) {
+                Log.e("SetLocation", "Fail to set location");
+            }
+        });
+    }
+
+    private void getMemberLocation(GoogleMap map) {
+        // TODO: get locations from server (이건 test)
+        MarkerOptions markerOptions = new MarkerOptions();
+        double latitude = myLocation.getLatitude();
+        double longitude = myLocation.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        Log.i("getMemberLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
+        markerOptions.position(latLng);
+        markerOptions.title("provider");
+        map.addMarker(markerOptions);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
     }
 }

@@ -1,6 +1,6 @@
-package com.example.cs496_week2_client.ui.contacts;
+package com.example.cs496_week2_client.ui.map;
 
-import com.example.cs496_week2_client.models.ContactModel;
+import com.example.cs496_week2_client.models.MemLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
-public class ContactDataService {
+public class LocationDataService {
     private String BASE_URL = "http://192.249.18.224/test/";
 
     Retrofit retrofitClient =
@@ -24,28 +24,28 @@ public class ContactDataService {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-    SelectAPI select = retrofitClient.create(SelectAPI.class);
-    InsertAPI insert = retrofitClient.create(InsertAPI.class);
-    UpdateAPI update = retrofitClient.create(UpdateAPI.class);
-    DeleteAPI delete = retrofitClient.create(DeleteAPI.class);
+    SelectAPI select = retrofitClient.create(com.example.cs496_week2_client.ui.map.SelectAPI.class);
+    InsertAPI insert = retrofitClient.create(com.example.cs496_week2_client.ui.map.InsertAPI.class);
+    UpdateAPI update = retrofitClient.create(com.example.cs496_week2_client.ui.map.UpdateAPI.class);
+    DeleteAPI delete = retrofitClient.create(com.example.cs496_week2_client.ui.map.DeleteAPI.class);
 }
 
 interface SelectAPI{
-    @GET("contact/get")
-    Call<ArrayList<ContactModel>> getContacts();
+    @GET("location/get")
+    Call<ArrayList<MemLocation>> getLocations();
 }
 
 interface InsertAPI{
-    @POST("contact/insert")
-    Call<ContactModel> insertContact(@Body HashMap<String, Object> param);
+//    @POST("contact/insert")
+//    Call<MemLocation> insertContact(@Body HashMap<String, Object> param);
 }
 
 interface UpdateAPI{
     @PUT("contact/update/status")
-    Call<ContactModel> setStatus(@Body HashMap<String, Object> param);
+    Call<MemLocation> setLocation(@Body HashMap<String, Object> param);
 }
 
-interface DeleteAPI{
+interface DeleteAPI {
 //    @POST("delete/{id}")
 //    Call<Test> deleteOne(@Path("id") long id);
 }
