@@ -3,6 +3,7 @@ package com.example.cs496_week2_client.ui.contacts;
 import android.app.Activity;
 import android.app.Application;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
@@ -38,10 +39,10 @@ public class ContactViewModel extends ViewModel {
     }
 
     public void getContacts() {
-        getContactsDevice();
-        Log.i("GetContacts", "Done from device");
         getContactsServer();
         Log.i("GetContacts", "Done from server");
+        getContactsDevice();
+        Log.i("GetContacts", "Done from device");
     }
 
     private void getContactsDevice() {
@@ -68,20 +69,12 @@ public class ContactViewModel extends ViewModel {
                 long person = cursor.getLong(3);
                 String lookup = cursor.getString(4);
 
-                Contact contact = new Contact(phone, fullName, image, person, lookup);
+                Contact contact = new Contact(phone, fullName, image, person, lookup, -1, -1, null);
                 ArrayList<Contact> list = contacts.getValue();
                 if (contact.isStartWith("01")) {
                     if(!isContained(contact))
                         list.add(contact);
                     Collections.sort(list);
-//                    list.sort(new Comparator<Contact>() {
-//                        @Override
-//                        public int compare(Contact o1, Contact o2) {
-//                            if (o1.fullName.compareTo(o2.fullName) > 0)
-//                                return 1;
-//                            return 0;
-//                        }
-//                    });
                     Log.d("<<CONTACTS>>", contact.getMsg());
                 }
                 contacts.setValue(list);
@@ -103,25 +96,16 @@ public class ContactViewModel extends ViewModel {
                     ArrayList<ContactModel> contactModels = response.body();
                     ArrayList<Contact> contact = contacts.getValue();
                     for (int i = 0; i < contactModels.size(); i++) {
-                        Contact ct = new Contact(contactModels.get(i).getPhone(),
-                                contactModels.get(i).getFullName(),
-                                contactModels.get(i).getImage(),
-                                Long.parseLong(contactModels.get(i).getPersonId()),
-                                contactModels.get(i).getLookup() );
+                        ContactModel ctm = contactModels.get(i);
+                        Contact ct = new Contact(ctm.getPhone(), ctm.getFullName(), ctm.getImage(),
+                                Long.parseLong(ctm.getPersonId()), ctm.getLookup(), ctm.getGroupId(),
+                                ctm.getStatus(), new Location(ctm.getLocation()));
                         if(!isContained(ct))
                         {
                             contact.add(ct);
                         }
                     }
                     Collections.sort(contact);
-//                    contact.sort(new Comparator<Contact>() {
-//                        @Override
-//                        public int compare(Contact o1, Contact o2) {
-//                            if (o1.fullName.compareTo(o2.fullName) > 0)
-//                                return 1;
-//                            return 0;
-//                        }
-//                    });
                     contacts.setValue(contact);
                 }
                 else try {
@@ -147,6 +131,9 @@ public class ContactViewModel extends ViewModel {
         input.put("lookup", contact.lookup);
         input.put("personId", Long.toString(contact.personId));
         input.put("image", contact.image);
+        input.put("groupId", contact.groupId);
+        input.put("status", contact.status);
+        input.put("location", contact.location.getProvider());
 
         // Init PUT function
         dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
