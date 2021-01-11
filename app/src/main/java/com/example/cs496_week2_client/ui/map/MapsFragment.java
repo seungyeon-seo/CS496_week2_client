@@ -107,7 +107,7 @@ public class MapsFragment extends Fragment {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
                 myLocation = location;
                 //uploadLocation();
-                //getMemberLocation(map);
+                getMemberLocation(map);
             }
         });
     }
@@ -140,8 +140,9 @@ public class MapsFragment extends Fragment {
     private void getMemberLocation(GoogleMap map) {
         // TODO: get locations from server (이건 test)
         MarkerOptions markerOptions = new MarkerOptions();
+
         double latitude = myLocation.getLatitude();
-        double longitude = myLocation.getLongitude();
+        double longitude = myLocation.getLongitude() + 10;
         LatLng latLng = new LatLng(latitude, longitude);
         Log.i("getMemberLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
         markerOptions.position(latLng);

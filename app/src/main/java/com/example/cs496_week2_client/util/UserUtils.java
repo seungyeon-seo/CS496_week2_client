@@ -3,7 +3,6 @@ package com.example.cs496_week2_client.util;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.cs496_week2_client.models.Post;
 import com.example.cs496_week2_client.models.User;
 
 import java.util.ArrayList;

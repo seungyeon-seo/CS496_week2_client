@@ -52,9 +52,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.feed.UploadImageActivity"
-            android:label="이미지 업로드" />
-        <activity
             android:name=".ui.login.LoginActivity"
             android:label="로그인" />
         <activity

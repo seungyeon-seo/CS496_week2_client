@@ -2,7 +2,6 @@ package com.example.cs496_week2_client.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -12,9 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
-import com.example.cs496_week2_client.models.Post;
 import com.example.cs496_week2_client.models.User;
-import com.example.cs496_week2_client.util.RequestCode;
 import com.example.cs496_week2_client.util.ResponseCode;
 import com.example.cs496_week2_client.util.UserUtils;
 import com.facebook.AccessToken;
@@ -26,6 +23,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -46,13 +44,15 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("Login Token", token);
             api.getUserService().auth.login(token).enqueue(new Callback<User>() {
                 @Override
+                @EverythingIsNonNull
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
                         // TODO response 객체로부터 id, nickname, posts 읽어오기
                         Toast.makeText(getApplicationContext(), "안녕하세요.", Toast.LENGTH_SHORT)
                                 .show();
                         User user = response.body();
-                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), (ArrayList<String>) user.getPosts(), token));
+                        assert user != null;
+                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), user.getPosts(), token));
                     } else if (response.code() == ResponseCode.HTTP_FORBIDDEN) {
                         Log.i("LoginActivity", "해당 유저가 존재하지 않습니다: " + response.body());
                         Toast.makeText(getApplicationContext(), "처음 뵙겠습니다!", Toast.LENGTH_SHORT)
@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
+                @EverythingIsNonNull
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.i("LoginActivity", "서버에 접속할 수 없습니다: ");
                     Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요!", Toast.LENGTH_SHORT)
@@ -98,13 +99,15 @@ public class LoginActivity extends AppCompatActivity {
         if (token != null) {
             api.getUserService().auth.login(token).enqueue(new Callback<User>() {
                 @Override
+                @EverythingIsNonNull
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
                         // TODO response 객체로부터 id, nickname, posts 읽어오기
                         Toast.makeText(getApplicationContext(), "안녕하세요.", Toast.LENGTH_SHORT)
                                 .show();
                         User user = response.body();
-                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), (ArrayList<String>) user.getPosts(), token));
+                        assert user != null;
+                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), user.getPosts(), token));
                     } else if (response.code() == ResponseCode.HTTP_FORBIDDEN) {
                         Log.i("LoginActivity", "해당 유저가 존재하지 않습니다: " + response.body());
                         Toast.makeText(getApplicationContext(), "처음 뵙겠습니다!", Toast.LENGTH_SHORT)
@@ -120,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
+                @EverythingIsNonNull
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.i("LoginActivity", "서버에 접속할 수 없습니다: ");
                     t.printStackTrace();
