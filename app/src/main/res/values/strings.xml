@@ -47,5 +47,6 @@
     <string name="group_name">그룹 이름</string>
     <string name="join_group">초대 코드가 있다면?</string>
     <string name="plus">+</string>
+    <string name="leave_group">그룹 탈퇴</string>
 
 </resources>

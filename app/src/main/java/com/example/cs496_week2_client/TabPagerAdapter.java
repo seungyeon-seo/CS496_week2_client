@@ -41,7 +41,7 @@ public class TabPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return MapsFragment.newInstance();
             case 2:
-                return TempFragment.newInstance();
+                return MyPageFragment.newInstance();
                 // TODO
                 //return MyPageFragment.newInstance(user, token);
         }
