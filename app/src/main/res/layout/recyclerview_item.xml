@@ -5,55 +5,81 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/image_default"
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        card_view:cardCornerRadius="4dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="10dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints">
 
-    <TextView
-        android:id="@+id/nameTextView"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/nanumsqure_r"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        android:paddingTop="15dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="16dp" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/image_default"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/numTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintStart_toEndOf="@+id/nameTextView"
-        android:paddingTop="15dp"
-        android:fontFamily="@font/nanumsqure_r"
-        android:gravity="center_vertical"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/nameTextView"
+            android:text="서승연"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="3dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumsqure_r"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            android:paddingTop="15dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="16dp" />
 
-    <ImageButton
-        android:id="@+id/callButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:background="#00000000"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/numTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/callbutton"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/numTextView"
+            android:text="010-9413-9308"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/nanumsqure_r"
+            android:gravity="center_vertical"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/statusView"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="220dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/status_chip"
+            android:text="No Group"
+            android:fontFamily="@font/gmarketsansmedium"
+            android:textSize="12dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
+
+        <ImageButton
+            android:id="@+id/callButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="310dp"
+            android:layout_marginTop="20dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toEndOf="@+id/numTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/callbutton"
+            tools:ignore="MissingConstraints"  />
+
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

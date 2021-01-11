@@ -2,6 +2,8 @@ package com.example.cs496_week2_client.models;
 
 public class ContactModel {
     String phone, fullName, lookup, personId, image;
+    int groupId, status;
+    String location;
 
     public String getFullName() {
         return fullName;
@@ -21,5 +23,17 @@ public class ContactModel {
 
     public String getPhone() {
         return phone;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

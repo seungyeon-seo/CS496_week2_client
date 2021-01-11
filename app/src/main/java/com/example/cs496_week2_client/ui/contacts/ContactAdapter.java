@@ -41,7 +41,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     // ViewHolder: store item view
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView nameView, numView;
+        TextView nameView, numView, statusView;
         ImageButton callButton;
 
         ViewHolder(View itemView) {
@@ -51,6 +51,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             nameView = itemView.findViewById(R.id.nameTextView);
             numView = itemView.findViewById(R.id.numTextView);
             callButton = (ImageButton) itemView.findViewById(R.id.callButton);
+            statusView = itemView.findViewById(R.id.statusView);
 
             // Click event for itemView
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +98,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             holder.imageView.setImageURI(Uri.parse(element.image));
         holder.nameView.setText(element.fullName);
         holder.numView.setText(element.phone);
+        setStatus(holder, element);
     }
 
     public int findText (String text) {
@@ -108,5 +110,24 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             }
         }
         return 0;
+    }
+
+    private void setStatus(ContactAdapter.ViewHolder holder, Contact ct) {
+        if (ct.groupId == -1)
+            return;
+        String status;
+        switch (ct.status) {
+            case 1:
+                status = "밥 먹는 중";
+            case 2:
+                status = "자는 중";
+            case 3:
+                status = "공부하는 중";
+            case 4:
+                status = "쉬는 중";
+            default:
+                status = "No Group";
+        }
+        holder.statusView.setText(status);
     }
 }

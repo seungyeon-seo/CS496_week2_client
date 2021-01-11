@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -70,7 +69,6 @@ public class ContactFragment extends Fragment {
 
         // Init View Model Variables
         viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity());
-
         viewModel = new ViewModelProvider(getActivity(), viewModelFactory).get(ContactViewModel.class);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
         binding.setLifecycleOwner(this);
@@ -139,10 +137,10 @@ public class ContactFragment extends Fragment {
                 Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
             }
         });
+
         return binding.getRoot();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -166,9 +164,10 @@ public class ContactFragment extends Fragment {
     private Contact findContact(String name) {
         for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
             Contact ct = viewModel.contacts.getValue().get(i);
-            if (ct.fullName == name)
+            if (ct.fullName.equals(name))
                 return ct;
         }
+        Log.e("findContact", "return null");
         return null;
     }
 }
