@@ -42,10 +42,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:hint="@string/nickname_hint"
+                        android:importantForAutofill="no"
                         android:inputType="textPersonName"
                         android:maxLines="1"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
+                        android:paddingHorizontal="5dp"
                         android:singleLine="true"
                         tools:text="@string/nickname_hint" />
 
@@ -55,29 +55,27 @@
                     android:id="@+id/passError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    app:passwordToggleEnabled="true">
+                    android:layout_marginTop="5dp">
 
                     <EditText
-                        android:id="@+id/password"
+                        android:id="@+id/phone_num"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:hint="@string/phone_number"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
-                        android:singleLine="true" />
+                        android:paddingHorizontal="5dp"
+                        android:singleLine="true"
+                        android:importantForAutofill="no" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/codeError"
+                    android:id="@+id/code_wrapper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    app:passwordToggleEnabled="true">
+                    android:layout_marginTop="5dp">
 
                     <EditText
                         android:id="@+id/code"
@@ -85,13 +83,34 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:hint="@string/code"
-                        android:inputType="phone"
+                        android:inputType="textCapCharacters"
                         android:maxLines="1"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
-                        android:singleLine="true" />
+                        android:paddingHorizontal="5dp"
+                        android:singleLine="true"
+                        android:importantForAutofill="no" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/group_name_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <EditText
+                        android:id="@+id/group_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/group_name"
+                        android:inputType="textMultiLine"
+                        android:maxLines="1"
+                        android:paddingHorizontal="5dp"
+                        android:singleLine="true"
+                        android:importantForAutofill="no" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
                     android:id="@+id/nickname_submit_button"
@@ -105,7 +124,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/createGroup"
+                    android:id="@+id/create_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -113,6 +132,17 @@
                     android:text="@string/create_new"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/join_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="@string/join_group"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -128,9 +158,9 @@
         android:background="@color/no_color"
         android:contentDescription="@string/image_preview_text"
         android:scaleType="centerCrop"
+        android:src="@drawable/com_facebook_profile_picture_blank_square"
         android:tint="@android:color/transparent"
         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-        android:src="@drawable/com_facebook_profile_picture_blank_square"
         tools:src="@drawable/com_facebook_profile_picture_blank_square" />
 
     <Button
@@ -140,15 +170,17 @@
         android:layout_below="@+id/image_preview"
         android:layout_marginLeft="-30dp"
         android:layout_marginTop="-30dp"
-        android:text="+"
         android:layout_toRightOf="@+id/image_preview"
         android:background="@drawable/button_gradient"
-        android:src="@drawable/mini_fab"
-        android:textColor="@color/main_color"
-        android:fontFamily="@font/gmarketsansbold"
-        android:textAlignment="center"
-        android:textSize="28sp"
         android:contentDescription="@string/image_preview_text"
         android:elevation="5dp"
-        android:gravity="center" />
+        android:fontFamily="@font/gmarketsansbold"
+        android:gravity="center"
+        android:src="@drawable/mini_fab"
+        android:text="@string/plus"
+        android:textAlignment="center"
+        android:textColor="@color/main_color"
+        android:textSize="28sp"
+        android:layout_marginStart="-30dp"
+        android:layout_toEndOf="@+id/image_preview" />
 </RelativeLayout>

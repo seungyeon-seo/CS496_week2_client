@@ -5,6 +5,7 @@ import com.example.cs496_week2_client.ui.login.UserService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 // Retrofit 인스턴스를 전체 앱에서 한 번만 만들기 위한 Factory class (ViewModelProvider 같은 느낌)
 public class Api {
@@ -32,6 +33,7 @@ public class Api {
                 new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(new OkHttpClient.Builder().build())
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 

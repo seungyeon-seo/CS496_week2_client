@@ -31,7 +31,7 @@
     <string name="new_status_button">상태 갱신 버튼</string>
     <string name="image_preview_text">선택한 이미지 파일 미리보기</string>
     <string name="image_select_button_text">프로필 사진 고르기</string>
-    <string name="code">초대 코드</string>
+    <string name="code">다섯 자리 초대 코드</string>
     <string name="prompt_nickname">Email</string>
     <string name="prompt_password">Password</string>
     <string name="login">Login</string>
@@ -44,5 +44,8 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="password_error">Please enter a password</string>
     <string name="error_invalid_password">Please enter a minimum password of 6 characters</string>
+    <string name="group_name">그룹 이름</string>
+    <string name="join_group">초대 코드가 있다면?</string>
+    <string name="plus">+</string>
 
 </resources>

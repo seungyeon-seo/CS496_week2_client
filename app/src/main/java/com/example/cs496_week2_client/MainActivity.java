@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity
             initViewPager(user, token);
         } else {
             Log.e("MainActivity", "Register 실패");
+            finish();
         }
     }
 
