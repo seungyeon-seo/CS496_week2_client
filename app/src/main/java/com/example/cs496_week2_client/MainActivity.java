@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,
             Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    public int[] grandResults = {-1, -1, -1, -1, -1, -1, -1};
+            Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION };
+    public int[] grandResults = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 
     /* Tab variables */
     private ViewPager2 viewPager;
@@ -47,8 +49,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // 로그인 액티비티 실행
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
+//        Intent loginIntent = new Intent(this, LoginActivity.class);
+//        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
+
+        // 로그인 없이
+        initViewPager(null, null);
+
         super.onCreate(savedInstanceState);
     }
 
@@ -152,7 +158,8 @@ public class MainActivity extends AppCompatActivity
         int statePermission = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[4]);
         int writeContactPermission = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[5]);
         int writeExternalStorage = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[6]);
-
+        int coarseLocation = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[7]);
+        int fineLocation = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[8]);
 
         grandResults[0] = readExternalStoragePermission;
         grandResults[1] = readContactPermission;
@@ -161,6 +168,8 @@ public class MainActivity extends AppCompatActivity
         grandResults[4] = statePermission;
         grandResults[5] = writeContactPermission;
         grandResults[6] = writeExternalStorage;
+        grandResults[7] = coarseLocation;
+        grandResults[8] = fineLocation;
 
         if (!(grandResults[0] == PackageManager.PERMISSION_GRANTED
                 && grandResults[1] == PackageManager.PERMISSION_GRANTED
@@ -168,7 +177,9 @@ public class MainActivity extends AppCompatActivity
                 && grandResults[3] == PackageManager.PERMISSION_GRANTED
                 && grandResults[4] == PackageManager.PERMISSION_GRANTED
                 && grandResults[5] == PackageManager.PERMISSION_GRANTED
-                && grandResults[6] == PackageManager.PERMISSION_GRANTED)) {
+                && grandResults[6] == PackageManager.PERMISSION_GRANTED
+                && grandResults[7] == PackageManager.PERMISSION_GRANTED
+                && grandResults[8] == PackageManager.PERMISSION_GRANTED )) {
 
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
@@ -177,7 +188,9 @@ public class MainActivity extends AppCompatActivity
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[3])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[4])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])) {
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[7])
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[8])) {
                 Snackbar.make(mLayout, "이 앱을 실행하려면 외부 저장소, 연락처, 전화 접근 권한이 필요합니다.",
                         Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> {
                             // 3-3. 사용자에게 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
@@ -218,7 +231,9 @@ public class MainActivity extends AppCompatActivity
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[3])
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[4])
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[5])
-                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])) {
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[6])
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[7])
+                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[8])) {
 
                     // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
                     Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",

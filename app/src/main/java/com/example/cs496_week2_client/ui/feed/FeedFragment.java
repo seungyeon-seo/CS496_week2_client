@@ -31,7 +31,7 @@ public class FeedFragment extends Fragment {
 
     public static FeedFragment newInstance(User user, String token) {
         FeedFragment feedFragment = new FeedFragment();
-        feedFragment.setArguments(getUserBundle(user, token));
+//        feedFragment.setArguments(getUserBundle(user, token));
         return feedFragment;
     }
 
@@ -44,8 +44,8 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         api = Api.getInstance();
-        user = parseUserBundleGetUser(getArguments());
-        token = parseUserBundleGetToken(getArguments());
+//        user = parseUserBundleGetUser(getArguments());
+//        token = parseUserBundleGetToken(getArguments());
         super.onCreate(savedInstanceState);
     }
 
@@ -58,10 +58,10 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         TextView nickName = view.findViewById(R.id.nickname_text);
         FloatingActionButton newPostButton = view.findViewById(R.id.new_post);
-        newPostButton.setOnClickListener( v -> {
-            Intent uploadImageIntent = new Intent(getActivity(), UploadImageActivity.class);
-            startActivity(uploadImageIntent);
-        });
+//        newPostButton.setOnClickListener( v -> {
+//            Intent uploadImageIntent = new Intent(getActivity(), UploadImageActivity.class);
+//            startActivity(uploadImageIntent);
+//        });
 
         if (user == null) {
             nickName.setText("로그인 해주세요");
