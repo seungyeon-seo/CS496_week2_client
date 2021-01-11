@@ -11,6 +11,7 @@ import com.example.cs496_week2_client.models.User;
 import com.example.cs496_week2_client.ui.contacts.ContactFragment;
 import com.example.cs496_week2_client.ui.map.MapsFragment;
 import com.example.cs496_week2_client.ui.my_page.MyPageFragment;
+import com.example.cs496_week2_client.ui.my_page.TempFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,7 @@ public class TabPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return MapsFragment.newInstance();
             case 2:
-                return ContactFragment.newInstance();
+                return TempFragment.newInstance();
                 // TODO
                 //return MyPageFragment.newInstance(user, token);
         }
