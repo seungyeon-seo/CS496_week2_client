@@ -13,10 +13,12 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class ContactDataService {
-    private String BASE_URL = "http://192.249.18.224/test/";
+    private String BASE_URL = "http://192.249.18.231/";
 
+    // TODO Api 안으로 옮겨서 retrofitClient 하나만 만들도록 하기
     Retrofit retrofitClient =
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -26,26 +28,14 @@ public class ContactDataService {
 
     SelectAPI select = retrofitClient.create(SelectAPI.class);
     InsertAPI insert = retrofitClient.create(InsertAPI.class);
-    UpdateAPI update = retrofitClient.create(UpdateAPI.class);
-    DeleteAPI delete = retrofitClient.create(DeleteAPI.class);
 }
 
 interface SelectAPI{
-    @GET("contact/get")
-    Call<ArrayList<ContactModel>> getContacts();
+    @GET("contact/{userId}")
+    Call<ArrayList<ContactModel>> getContacts(@Path("userId") String userId);
 }
 
 interface InsertAPI{
-    @POST("contact/insert")
-    Call<ContactModel> insertContact(@Body HashMap<String, Object> param);
-}
-
-interface UpdateAPI{
-    @PUT("contact/update/status")
-    Call<ContactModel> setStatus(@Body HashMap<String, Object> param);
-}
-
-interface DeleteAPI{
-//    @POST("delete/{id}")
-//    Call<Test> deleteOne(@Path("id") long id);
+    @POST("contact/insert/{userId}")
+    Call<ContactModel> insertContact(@Body HashMap<String, Object> param, @Path("userId") String userId);
 }

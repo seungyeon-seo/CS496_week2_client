@@ -86,6 +86,7 @@ public class ContactViewModel extends ViewModel {
     }
 
     private void getContactsServer() {
+        // TODO userId 포함하여 getContact 호출
         dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -136,6 +137,7 @@ public class ContactViewModel extends ViewModel {
         if(contact.location != null) input.put("location", contact.location.getProvider());
 
         // Init PUT function
+        // TODO userId 포함하여 insertContact 호출
         dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
             @Override
             public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
@@ -153,36 +155,6 @@ public class ContactViewModel extends ViewModel {
             @Override
             public void onFailure(Call<ContactModel> call, Throwable t) {
                 Log.e("InsertContact", "Fail to insert contact " + contact.fullName);
-                t.printStackTrace();
-            }
-        });
-    }
-
-    public void setStatus(Contact contact, int status) {
-        Log.i("setStatus", "start function about "+contact.fullName);
-
-        // Set input for server
-        HashMap<String, Object> input = new HashMap<>();
-        input.put("phone", contact.phone);
-        input.put("status", status);
-
-        dataService.update.setStatus(input).enqueue(new Callback<ContactModel>() {
-            @Override
-            public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
-                Log.d("SetStatus", "on Response");
-                if (!response.isSuccessful()) {
-                    Log.d("SetStatus", "response is not successful");
-                    return;
-                }
-                ContactModel ct = response.body();
-                if (ct != null) {
-                    Log.d("SetStatus", "success "+response.message());
-                } else Log.d("SetStatus", "contact is null");
-            }
-
-            @Override
-            public void onFailure(Call<ContactModel> call, Throwable t) {
-                Log.e("SetStatus", "Fail to set status " + contact.fullName);
                 t.printStackTrace();
             }
         });

@@ -55,6 +55,7 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO Api 에서 받아오기
         dataService = new ContactDataService();
     }
 
@@ -146,7 +147,8 @@ public class ContactFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             MainActivity main = (MainActivity) getActivity();
             switch (requestCode) {
-                //createButton click
+                // createButton click
+                // TODO requestCode class 로 리팩토링
                 case 10001:
                     main.setViewPager(0);
                     Bundle bundle = data.getExtras();

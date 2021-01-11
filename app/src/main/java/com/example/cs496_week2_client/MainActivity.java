@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        // TODO LoginActivity, RegisterActivity 잘 실행되는지 확인
+        // TODO 서버에서 fakeVerifyToken 을 verifyToken 으로 바꾸기
+
 //        // 로그인 액티비티 실행
 //        Intent loginIntent = new Intent(this, LoginActivity.class);
 //        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);

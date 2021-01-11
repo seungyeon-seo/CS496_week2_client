@@ -28,6 +28,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+// TODO gms 모듈 gradle 파일에 추가 
+// TODO 뷰모델 만들어서 group/members API로 받아온 member list 받아오도록 하기
+// TODO member list 데이터 가공해서 marker 지도에 표시하기
+// TODO marker 위에 유저 프로필 사진 glide로 받아오기
+
 import java.util.HashMap;
 
 import retrofit2.Call;

@@ -2,6 +2,7 @@ package com.example.cs496_week2_client.models;
 
 import java.util.ArrayList;
 
+// TODO 서버의 models/group 에 맞춰 수정
 public class User {
     private String nickName;
     private String id;

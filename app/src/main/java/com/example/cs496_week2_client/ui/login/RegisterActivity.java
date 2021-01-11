@@ -36,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.internal.EverythingIsNonNull;
 
+
 public class RegisterActivity extends AppCompatActivity {
     UserService userService;
     Uri selectedUri;
@@ -81,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
         imageSelectButton.setOnClickListener(v -> selectImage());
 
         submitButton.setOnClickListener(v -> {
+            // TODO 필수 필드 입력 안하면 submit 버튼 못 누르게 하기
+
             if (imageData == null || imageData.length == 0) {
                 Toast.makeText(getApplicationContext(), "프로필 사진을 선택해주세요!", Toast.LENGTH_SHORT)
                         .show();
@@ -167,7 +170,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    // TODO userId 대신 token 을 사용하도록 클라이언트, 서버 모두 수정
     private void joinGroup(String userId) {
         Log.i("joinGroup", "그룹에 들어가는 중");
         userService.group.joinGroup(getCode(), userId).enqueue(new Callback<Group>() {
@@ -236,6 +238,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         @EverythingIsNonNull
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            // TODO glide 로 서버에서 받은 URL로 이미지를 imagePreview 에 띄우기
                             Toast.makeText(getApplicationContext(), response.code() + " onResponse", Toast.LENGTH_SHORT).show();
                         }
 

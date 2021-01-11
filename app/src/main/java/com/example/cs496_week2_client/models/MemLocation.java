@@ -3,6 +3,7 @@ package com.example.cs496_week2_client.models;
 public class MemLocation {
     String profile, location, name;
     int status;
+    // TODO User 모델에 포함되도록 하기
 
     public String getProfile() {
         return profile;

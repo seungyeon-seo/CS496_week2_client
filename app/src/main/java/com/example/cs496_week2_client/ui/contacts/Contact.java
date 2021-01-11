@@ -11,6 +11,8 @@ public class Contact implements Comparable<Contact> {
     int status = -1;
     Location location = null;
 
+    // TODO 필요 없는 정보 지우기
+
     public Contact(String ph, String fn, String bytes, long pid, String key, int gid, int stat, Location locat) {
         phone = ph;
         fullName = fn;

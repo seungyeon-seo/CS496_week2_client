@@ -85,7 +85,8 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.i("MyPageFragment", "leave button clicked");
-                // TODO: update user info on server (no group id)
+                // TODO UserService 의 exitGroup 호출, LoginActivity 로 이동시키기
+                // TODO 서버에서 exit 한 다음 바로 join 이나 create 가능한지 확인하기
             }
         });
 

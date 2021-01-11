@@ -33,6 +33,7 @@ public class TabPagerAdapter extends FragmentStateAdapter {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public Fragment createFragment(int position) {
+        // TODO (시간 되면) 탭페이저 때문에 맵을 움직이기 어려우니 뷰페이저를 bottom navigation 으로 바꾸기
         switch (position) {
             case 0:
             default:

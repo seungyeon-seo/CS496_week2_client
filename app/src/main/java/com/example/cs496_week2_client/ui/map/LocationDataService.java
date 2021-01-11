@@ -17,6 +17,7 @@ import retrofit2.http.PUT;
 public class LocationDataService {
     private String BASE_URL = "http://192.249.18.224/test/";
 
+    // TODO Api 안으로 옮겨서 retrofitClient 하나만 만들도록 하기
     Retrofit retrofitClient =
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -25,27 +26,17 @@ public class LocationDataService {
                     .build();
 
     SelectAPI select = retrofitClient.create(com.example.cs496_week2_client.ui.map.SelectAPI.class);
-    InsertAPI insert = retrofitClient.create(com.example.cs496_week2_client.ui.map.InsertAPI.class);
     UpdateAPI update = retrofitClient.create(com.example.cs496_week2_client.ui.map.UpdateAPI.class);
-    DeleteAPI delete = retrofitClient.create(com.example.cs496_week2_client.ui.map.DeleteAPI.class);
 }
 
 interface SelectAPI{
-    @GET("location/get")
+    // TODO 서버 API 에 맞춰서 수정
+    @GET("group/members")
     Call<ArrayList<MemLocation>> getLocations();
 }
 
-interface InsertAPI{
-//    @POST("contact/insert")
-//    Call<MemLocation> insertContact(@Body HashMap<String, Object> param);
-}
-
 interface UpdateAPI{
-    @PUT("contact/update/status")
+    // TODO 서버 API 에 맞춰서 수정
+    @PUT("user/sync")
     Call<MemLocation> setLocation(@Body HashMap<String, Object> param);
-}
-
-interface DeleteAPI {
-//    @POST("delete/{id}")
-//    Call<Test> deleteOne(@Path("id") long id);
 }
