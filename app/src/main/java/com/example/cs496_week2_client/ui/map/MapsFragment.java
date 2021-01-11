@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -142,12 +143,11 @@ public class MapsFragment extends Fragment {
         MarkerOptions markerOptions = new MarkerOptions();
 
         double latitude = myLocation.getLatitude();
-        double longitude = myLocation.getLongitude() + 10;
+        double longitude = myLocation.getLongitude() + 0.01;
         LatLng latLng = new LatLng(latitude, longitude);
         Log.i("getMemberLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
         markerOptions.position(latLng);
         markerOptions.title("provider");
         map.addMarker(markerOptions);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
     }
 }
