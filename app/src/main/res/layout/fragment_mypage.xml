@@ -17,10 +17,10 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/item_image"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="500dp"
             android:background="#FFFFFF"
             android:padding="10dp"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
             <LinearLayout
@@ -66,19 +66,33 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/leave_button"
-                    android:layout_width="180dp"
+                <Button
+                    android:id="@+id/group_invite_button"
+                    android:text="그룹 코드 (공유하기)"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_margin="55dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/status_chip"
-                    android:text="@string/leave_group"
-                    android:textColor="@color/white"
-                    android:textSize="16dp"
-                    android:clickable="true"
-                    android:gravity="center"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/button_invite"
+                    android:contentDescription="@string/nickname_submit_button_desc"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
                     android:fontFamily="@font/gmarketsansmedium" />
+
+                <Button
+                    android:id="@+id/leave_button"
+                    android:text="@string/leave_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/button_exit"
+                    android:contentDescription="@string/nickname_submit_button_desc"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/gmarketsansmedium" />
+
+
+
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </RelativeLayout>

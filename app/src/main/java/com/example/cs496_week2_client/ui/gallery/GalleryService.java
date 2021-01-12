@@ -18,12 +18,10 @@ public class GalleryService {
         image = retrofitClient.create(ImageAPI.class);
     }
 
-    // TODO 이미지
 }
 
 interface ImageAPI {
     @Multipart
     @POST("upload")
     Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("name") RequestBody name);
-    // TODO token 함께 보내기
 }

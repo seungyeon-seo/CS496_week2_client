@@ -43,7 +43,7 @@ interface AuthAPI {
 interface ImageAPI {
     @Multipart
     @POST("upload/{userId}")
-    Call<ResponseBody> postImage(@Path("userId") String userId, @Part MultipartBody.Part image, @Part("name") RequestBody name);
+    Call<String> postImage(@Path("userId") String userId, @Part MultipartBody.Part image, @Part("name") RequestBody name);
 }
 
 interface GroupAPI {

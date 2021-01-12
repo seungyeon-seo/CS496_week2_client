@@ -7,7 +7,6 @@ import com.example.cs496_week2_client.models.User;
 
 import java.util.ArrayList;
 
-// TODO 변경된 User 모델에 맞춰 메소드 손보기
 public class UserUtils {
     public static Intent getUserIntent(User user, String token) {
         Intent intent = new Intent();

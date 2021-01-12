@@ -1,6 +1,6 @@
 package com.example.cs496_week2_client.ui.contacts;
 
-import com.example.cs496_week2_client.models.ContactModel;
+import com.example.cs496_week2_client.models.Contact;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +24,8 @@ public class ContactService {
 
 interface ContactAPI{
     @GET("contact/{userId}")
-    Call<ArrayList<ContactModel>> getContacts(@Path("userId") String userId);
+    Call<ArrayList<Contact>> getContacts(@Path("userId") String userId);
 
     @POST("contact/insert/{userId}")
-    Call<ContactModel> insertContact(@Body HashMap<String, Object> param, @Path("userId") String userId);
+    Call<Contact> insertContact(@Body HashMap<String, Object> param, @Path("userId") String userId);
 }

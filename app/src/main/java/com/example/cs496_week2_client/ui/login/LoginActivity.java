@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
                 @EverythingIsNonNull
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
-                        // TODO response 객체로부터 id, nickname, posts 읽어오기
                         Toast.makeText(getApplicationContext(), "안녕하세요.", Toast.LENGTH_SHORT)
                                 .show();
                         User user = response.body();
@@ -99,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                 @EverythingIsNonNull
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
-                        // TODO response 객체로부터 id, nickname, posts 읽어오기
                         Toast.makeText(getApplicationContext(), "안녕하세요.", Toast.LENGTH_SHORT)
                                 .show();
                         User user = response.body();

@@ -23,12 +23,14 @@ import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.databinding.FragmentContactBinding;
+import com.example.cs496_week2_client.models.Contact;
 import com.example.cs496_week2_client.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
+import static com.example.cs496_week2_client.util.UserUtils.parseUserBundleGetUser;
 
 public class ContactFragment extends Fragment {
     View view;
@@ -39,6 +41,7 @@ public class ContactFragment extends Fragment {
     ViewGroup initContainer;
     Bundle initSavedInstanceState;
     ContactService dataService;
+    User user;
 
     // For view model
     ContactViewModel viewModel;
@@ -60,6 +63,7 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = parseUserBundleGetUser(getArguments());
         dataService = Api.getInstance().getContactService();
     }
 
@@ -72,7 +76,7 @@ public class ContactFragment extends Fragment {
         if (savedInstanceState != null) initSavedInstanceState = savedInstanceState;
 
         // Init View Model Variables
-        viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity());
+        viewModelFactory = new ContactViewModelFactory(getActivity().getApplication(), getActivity(), user);
         viewModel = new ViewModelProvider(getActivity(), viewModelFactory).get(ContactViewModel.class);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false);
         binding.setLifecycleOwner(this);
@@ -120,24 +124,18 @@ public class ContactFragment extends Fragment {
 
         // Init createButton
         FloatingActionButton createButton = binding.phoneAddButton;
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ContactCreateActivity.class);
-                startActivityForResult(intent, RequestCode.CREATE_NEW_CONTACT);
-            }
+        createButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ContactCreateActivity.class);
+            startActivityForResult(intent, RequestCode.CREATE_NEW_CONTACT);
         });
 
         // Init sync Button
         ImageButton syncButton = binding.synchButton;
-        syncButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
-                    viewModel.postContact(viewModel.contacts.getValue().get(i));
-                }
-                Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
+        syncButton.setOnClickListener(v -> {
+            for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
+                viewModel.postContact(viewModel.contacts.getValue().get(i));
             }
+            Toast.makeText(getContext(), "동기화 중입니다", Toast.LENGTH_SHORT).show();
         });
 
         return binding.getRoot();
@@ -167,7 +165,7 @@ public class ContactFragment extends Fragment {
     private Contact findContact(String name) {
         for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
             Contact ct = viewModel.contacts.getValue().get(i);
-            if (ct.fullName.equals(name))
+            if (ct.getFullName().equals(name))
                 return ct;
         }
         Log.e("findContact", "return null");

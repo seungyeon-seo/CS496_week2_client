@@ -19,7 +19,6 @@
             android:layout_margin="@dimen/text_margin"
             tools:text="안녕하세요 상아님" />
 
-        <!--  TODO 지도 추가      -->
 
     </LinearLayout>
 

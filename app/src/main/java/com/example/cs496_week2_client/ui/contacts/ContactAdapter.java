@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.models.Contact;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public void setData(ArrayList<Contact> data) {
         mData = data;
-        // TODO notifyDataset change나 DiffUtils 로 최적화
+        // TODO DiffUtils 로 최적화
     }
 
     // ViewHolder: store item view
@@ -61,9 +62,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     if (pos != RecyclerView.NO_POSITION){
                         Contact ct = mData.get(pos);
                         Intent intent = new Intent(v.getContext(), ContactInfoActivity.class);
-                        intent.putExtra("Name", ct.fullName);
-                        intent.putExtra("Number", ct.phone);
-                        if (ct.image != null) intent.putExtra("Image", ct.image.toString());
+                        intent.putExtra("Name", ct.getFullName());
+                        intent.putExtra("Number", ct.getPhone());
+                        if (ct.getImage() != null) intent.putExtra("Image", ct.getImage());
                         else intent.putExtra("Image", "");
                         fragment.startActivityForResult(intent, 10002);
                     }
@@ -94,17 +95,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(ContactAdapter.ViewHolder holder, int position) {
         Contact element = mData.get(position) ;
-        if (element.image != null)
-            holder.imageView.setImageURI(Uri.parse(element.image));
-        holder.nameView.setText(element.fullName);
-        holder.numView.setText(element.phone);
+        if (element.getImage() != null)
+            holder.imageView.setImageURI(Uri.parse(element.getImage()));
+        holder.nameView.setText(element.getFullName());
+        holder.numView.setText(element.getPhone());
     }
 
     public int findText (String text) {
         for (int i = 0; i < getItemCount(); i++) {
             Contact element = mData.get(i);
-            if (element.fullName.toLowerCase().contains(text)
-                    || element.phone.toString().contains(text)) {
+            if (element.getFullName().toLowerCase().contains(text)
+                    || element.getPhone().contains(text)) {
                 return i;
             }
         }

@@ -52,15 +52,14 @@ public class MainActivity extends AppCompatActivity
         // TODO 서버에서 fakeVerifyToken 을 verifyToken 으로 바꾸기
 
 //        // 로그인 액티비티 실행
-//        Intent loginIntent = new Intent(this, LoginActivity.class);
-//        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
 
         // 로그인 없이 실행
-        User fakeUser = UserUtils.getFakeUser();
-        // TODO Login, Register 없이 유저 만들어서 테스트
-        String fakeToken = "fake token";
-
-        initViewPager(fakeUser, fakeToken);
+//        User fakeUser = UserUtils.getFakeUser();
+//        String fakeToken = "fake token";
+//
+//        initViewPager(fakeUser, fakeToken);
         super.onCreate(savedInstanceState);
     }
 

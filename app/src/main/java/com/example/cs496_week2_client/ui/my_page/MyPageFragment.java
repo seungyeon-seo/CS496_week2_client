@@ -99,7 +99,6 @@ public class MyPageFragment extends Fragment {
                         Toast.makeText(getContext(), "그룹 탈퇴 실패", Toast.LENGTH_SHORT);
                     }
                 });
-                // TODO (완료) UserService 의 exitGroup 호출, LoginActivity 로 이동시키기
                 // TODO 서버에서 exit 한 다음 바로 join 이나 create 가능한지 확인하기
             }
         });

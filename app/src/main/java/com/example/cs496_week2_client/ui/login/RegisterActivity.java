@@ -41,11 +41,11 @@ public class RegisterActivity extends AppCompatActivity {
     UserService userService;
     Uri selectedUri;
     byte[] imageData;
-    Uri imageUri;
     EditText nicknameEditText;
     EditText codeEditText;
     String userId;
     EditText groupNameEditText;
+    EditText phoneEditText;
 
     TextInputLayout codeWrapper;
     TextInputLayout groupNameWrapper;
@@ -67,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         Button imageSelectButton = findViewById(R.id.image_select_button);
 
         nicknameEditText = findViewById(R.id.nickname_edit_text);
+        phoneEditText = findViewById(R.id.phone_num);
         codeEditText = findViewById(R.id.code);
         groupNameEditText = findViewById(R.id.group_name);
         groupNameWrapper = findViewById(R.id.group_name_wrapper);
@@ -82,14 +83,35 @@ public class RegisterActivity extends AppCompatActivity {
         imageSelectButton.setOnClickListener(v -> selectImage());
 
         submitButton.setOnClickListener(v -> {
-            // TODO 필수 필드 입력 안하면 submit 버튼 못 누르게 하기
-
-            if (imageData == null || imageData.length == 0) {
+            if (mode == Mode.JOIN_GROUP && getCode().length() != 5) {
+                Toast.makeText(getApplicationContext(), "다섯자리 그룹 초대 코드를 입력해주세요!", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (mode == Mode.CREATE_GROUP && getGroupName().length() < 1) {
+                Toast.makeText(getApplicationContext(), "그룹 이름을 입력해주세요!", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (imageData == null || imageData.length == 0) {
                 Toast.makeText(getApplicationContext(), "프로필 사진을 선택해주세요!", Toast.LENGTH_SHORT)
                         .show();
+            } else if (getPhone().length() < 1) {
+                Toast.makeText(getApplicationContext(), "핸드폰 번호를 입력해주세요!", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (!isValidPhone(getPhone())) {
+                Toast.makeText(getApplicationContext(), "핸드폰 번호를 01012345678 형식으로 입력해주세요", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Toast.makeText(getApplicationContext(), "가입중입니다", Toast.LENGTH_SHORT)
+                        .show();
+                registerUser();
             }
-            else registerUser();
         });
+    }
+
+    private String getPhone() {
+        return phoneEditText.getText().toString();
+    }
+
+    private boolean isValidPhone(String phone) {
+        return (phone.length() == 11 && phone.startsWith("01"));
     }
 
     private void joinGroupViewSetup() {
@@ -140,7 +162,7 @@ public class RegisterActivity extends AppCompatActivity {
                     User user = response.body();
                     assert user != null;
                     userId = user.getId();
-                    
+
                     postImage(userId);
                     setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(user, getToken()));
                 } else if (response.code() == ResponseCode.HTTP_CONFLICT) {
@@ -230,21 +252,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void postImage(String userId) {
-        RequestBody reqfile = RequestBody.create(MediaType.parse("image/*"), imageData);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", "abc", reqfile);
+        RequestBody file = RequestBody.create(MediaType.parse("image/*"), imageData);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", "abc", file);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-        Call<ResponseBody> req = userService.image.postImage(userId, body, name);
-        req.enqueue(new Callback<ResponseBody>() {
+        userService.image.postImage(userId, body, name).enqueue(new Callback<String>() {
                         @Override
                         @EverythingIsNonNull
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            // TODO glide 로 서버에서 받은 URL로 이미지를 imagePreview 에 띄우기
-                            Toast.makeText(getApplicationContext(), response.code() + " onResponse", Toast.LENGTH_SHORT).show();
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            // TODO glide 로 서버에서 받은 URL 로 이미지를 imagePreview 에 띄우기
+                            Toast.makeText(getApplicationContext(), response.body(), Toast.LENGTH_SHORT).show();
+                            Log.d("RegisterActivity", response.toString());
                         }
 
                         @Override
                         @EverythingIsNonNull
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        public void onFailure(Call<String> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
                             t.printStackTrace();
                         }
