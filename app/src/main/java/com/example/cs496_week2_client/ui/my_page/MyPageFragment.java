@@ -36,6 +36,7 @@ import static com.example.cs496_week2_client.util.UserUtils.parseUserBundleGetUs
 
 public class MyPageFragment extends Fragment {
     TextView nameView, numView, leaveButton;
+    Button inviteButton;
     ShapeableImageView preview;
     MyService dataService;
 
@@ -75,10 +76,11 @@ public class MyPageFragment extends Fragment {
         numView = (TextView) view.findViewById(R.id.phone_num);
         preview = (ShapeableImageView) view.findViewById(R.id.image_preview);
         leaveButton = (TextView) view.findViewById(R.id.leave_button);
-
+        inviteButton = view.findViewById(R.id.group_invite_button);
         // Set views using user information
         nameView.setText(user.getNickName());
         numView.setText(user.getPhoneNum());
+        inviteButton.setText("초대하기 (코드: "+ user.getGroupCode() +")");
         Glide.with(this).load("http://192.249.18.231/image/" + user.getProfilePath()).into(preview);
 
         // Set leave button
