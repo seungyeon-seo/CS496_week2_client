@@ -16,4 +16,5 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/item_image_src"
         android:src="@mipmap/ic_launcher" />
+
 </com.google.android.material.card.MaterialCardView>

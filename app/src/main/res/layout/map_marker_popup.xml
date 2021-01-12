@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_image"
+    android:layout_width="@dimen/item_image_size"
+    android:layout_height="@dimen/item_image_size"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/item_image_margin"
+    android:elevation="10dp"
+    app:cardCornerRadius="@dimen/item_image_corner_radius">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/no_color"
+            android:contentDescription="map marker"
+            android:scaleType="centerCrop"
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            android:tint="@android:color/transparent"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            tools:src="@drawable/com_facebook_profile_picture_blank_square" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansmedium"
+            tools:text="자는 중" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
