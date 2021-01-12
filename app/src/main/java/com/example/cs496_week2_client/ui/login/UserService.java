@@ -3,6 +3,8 @@ package com.example.cs496_week2_client.ui.login;
 import com.example.cs496_week2_client.models.Group;
 import com.example.cs496_week2_client.models.User;
 
+import java.util.ArrayList;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -51,7 +53,7 @@ interface GroupAPI {
     @GET("group/join/{code}/{userId}")
     Call<Group> joinGroup(@Path("code") String code, @Path("userId") String userId);
 
-    @GET("group/exit/{code}/{userId}")
-    Call<String> exitGroup(@Path("code") String code, @Path("userId") String userId);
+//    @GET("group/exit/{code}/{userId}")
+//    Call<String> exitGroup(@Path("code") String code, @Path("userId") String userId);
 
 }
