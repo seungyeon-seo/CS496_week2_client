@@ -17,9 +17,6 @@ import com.example.cs496_week2_client.util.UserUtils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
-
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                                 .show();
                         User user = response.body();
                         assert user != null;
-                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), user.getPosts(), token));
+                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user, token));
                     } else if (response.code() == ResponseCode.HTTP_FORBIDDEN) {
                         Log.i("LoginActivity", "해당 유저가 존재하지 않습니다: " + response.body());
                         Toast.makeText(getApplicationContext(), "처음 뵙겠습니다!", Toast.LENGTH_SHORT)
@@ -107,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                                 .show();
                         User user = response.body();
                         assert user != null;
-                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user.getId(), user.getNickName(), user.getPosts(), token));
+                        setResult(ResponseCode.LOGIN_SUCCESSFUL, UserUtils.getUserIntent(user, token));
                     } else if (response.code() == ResponseCode.HTTP_FORBIDDEN) {
                         Log.i("LoginActivity", "해당 유저가 존재하지 않습니다: " + response.body());
                         Toast.makeText(getApplicationContext(), "처음 뵙겠습니다!", Toast.LENGTH_SHORT)

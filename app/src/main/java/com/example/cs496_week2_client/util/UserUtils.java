@@ -9,8 +9,9 @@ import java.util.ArrayList;
 
 // TODO 변경된 User 모델에 맞춰 메소드 손보기
 public class UserUtils {
-    public static Intent getUserIntent(User user) {
+    public static Intent getUserIntent(User user, String token) {
         Intent intent = new Intent();
+        intent.putExtra("token", token);
         intent.putExtra("nickName", user.getNickName());
         intent.putExtra("userId", user.getId());
         intent.putExtra("phoneNum", user.getPhoneNum());
@@ -39,6 +40,11 @@ public class UserUtils {
 
         return user;
     }
+
+    public static String parseUserIntentGetToken(Intent intent) {
+        return intent.getStringExtra("token");
+    }
+
 
     public static Bundle getUserBundle(User user, String token) {
         Bundle bundle = new Bundle();
@@ -84,7 +90,7 @@ public class UserUtils {
 
         // 제주도 시민 김땡땡 씨
         fakeUser.setNickName("김땡땡");
-        fakeUser.setId("id11111");
+        fakeUser.setId("fake token");
         fakeUser.setPhoneNum("01012345678");
         fakeUser.setStatus("밥먹는중");
         fakeUser.setProfilePath("/upload/abc1610263375412.JPEG");

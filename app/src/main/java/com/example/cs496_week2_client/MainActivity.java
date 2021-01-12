@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
     private void handleLoginActivityResult(int resultCode, Intent data) {
         switch (resultCode) {
             case ResponseCode.LOGIN_SUCCESSFUL:
-                String token = data.getStringExtra("token");
+                String token = UserUtils.parseUserIntentGetToken(data);
                 User user = UserUtils.parseUserIntent(data);
                 Log.i("MainActivity", "Login 성공 - nickName: " + user.getNickName());
                 initViewPager(user, token);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
 
     private void handleRegisterActivityResult(int resultCode, Intent data) {
         if (resultCode == ResponseCode.REGISTER_SUCCESSFUL) {
-            String token = data.getStringExtra("token");
+            String token = UserUtils.parseUserIntentGetToken(data);
             User user = UserUtils.parseUserIntent(data);
             Log.i("MainActivity", "Register 성공 - nickName: " + user.getNickName());
             initViewPager(user, token);
@@ -243,11 +243,11 @@ public class MainActivity extends AppCompatActivity
                         || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[8])) {
 
                     // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
-                    Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",
+                    Snackbar.make(findViewById(R.id.main_layout), "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",
                             Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> finish()).show();
                 } else {
                     // “다시 묻지 않음”을 사용자가 체크하고 거부를 선택한 경우에는 설정(앱 정보)에서 퍼미션을 허용해야 앱을 사용할 수 있습니다.
-                    Snackbar.make(mLayout, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ",
+                    Snackbar.make(findViewById(R.id.main_layout), "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ",
                             Snackbar.LENGTH_INDEFINITE).setAction("확인", view -> finish()).show();
                 }
             }

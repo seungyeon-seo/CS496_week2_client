@@ -142,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userId = user.getId();
                     
                     postImage(userId);
-                    setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(user));
+                    setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(user, getToken()));
                 } else if (response.code() == ResponseCode.HTTP_CONFLICT) {
                     Log.i("RegisterCallback", "이미 존재하는 유저입니다: " + response.body());
                     setResult(ResponseCode.REGISTER_FAILURE);
