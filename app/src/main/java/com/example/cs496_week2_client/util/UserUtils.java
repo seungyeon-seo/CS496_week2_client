@@ -13,7 +13,7 @@ public class UserUtils {
         intent.putExtra("token", token);
         intent.putExtra("nickName", user.getNickName());
         intent.putExtra("userId", user.getId());
-        intent.putExtra("phoneNum", user.getPhoneNum());
+        intent.putExtra("phoneNum", user.getPhone());
         intent.putExtra("status", user.getStatus());
         intent.putExtra("profilePath", user.getProfilePath());
         intent.putExtra("groupCode", user.getGroupCode());
@@ -29,7 +29,7 @@ public class UserUtils {
 
         user.setNickName(intent.getStringExtra("nickName"));
         user.setId(intent.getStringExtra("userId"));
-        user.setPhoneNum(intent.getStringExtra("phoneNum"));
+        user.setPhone(intent.getStringExtra("phoneNum"));
         user.setStatus(intent.getStringExtra("status"));
         user.setProfilePath(intent.getStringExtra("profilePath"));
         user.setGroupCode(intent.getStringExtra("groupCode"));
@@ -49,7 +49,7 @@ public class UserUtils {
         Bundle bundle = new Bundle();
         bundle.putString("nickName", user.getNickName());
         bundle.putString("userId", user.getId());
-        bundle.putString("phoneNum", user.getPhoneNum());
+        bundle.putString("phoneNum", user.getPhone());
         bundle.putString("status", user.getStatus());
         bundle.putString("profilePath", user.getProfilePath());
         bundle.putString("groupCode", user.getGroupCode());
@@ -65,7 +65,7 @@ public class UserUtils {
         User user = new User();
         user.setNickName(bundle.getString("nickName"));
         user.setId(bundle.getString("userId"));
-        user.setPhoneNum(bundle.getString("phoneNum"));
+        user.setPhone(bundle.getString("phoneNum"));
         user.setStatus(bundle.getString("status"));
         user.setProfilePath(bundle.getString("profilePath"));
         user.setGroupCode(bundle.getString("groupCode"));
@@ -90,7 +90,7 @@ public class UserUtils {
         // 제주도 시민 김땡땡 씨
         fakeUser.setNickName("김땡땡");
         fakeUser.setId("fake token");
-        fakeUser.setPhoneNum("01012345678");
+        fakeUser.setPhone("01012345678");
         fakeUser.setStatus("밥먹는중");
         fakeUser.setProfilePath("abc1610263375412.JPEG");
         fakeUser.setContacts(fakeContacts);

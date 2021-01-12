@@ -38,6 +38,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.User;
@@ -341,6 +342,8 @@ public class MapsFragment extends Fragment {
                     return;
                 }
                 user = response.body();
+                MainActivity main = (MainActivity) getActivity();
+                main.setFragment2();
                 Log.i("Set Status", user.getNickName() + "'s status is set " + user.getStatus());
             }
 

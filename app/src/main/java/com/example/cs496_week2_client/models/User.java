@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class User {
     private String nickName;
     private String id;
-    private String phoneNum;
+    private String phone;
     private String status;
     private String profilePath;
     private String groupCode;
@@ -29,8 +29,8 @@ public class User {
         return longitude;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhone() {
+        return phone;
     }
 
     public String getProfilePath() {
@@ -73,8 +73,8 @@ public class User {
         this.longitude = longitude;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setProfilePath(String profilePath) {
