@@ -5,10 +5,8 @@ import com.example.cs496_week2_client.models.User;
 
 import java.util.ArrayList;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -26,7 +24,11 @@ interface LocationAPI{
     @GET("group/members/{groupCode}")
     Call<ArrayList<User>> getMembers(@Path("groupCode") String groupCode);
 
-    @GET("user/sync/{userId}/{status}/{latitude}/{longitude}")
-    Call<User> setUserStatusLocation(@Path("userId") String userId, @Path("status") String status, @Path("latitude") String latitude, @Path("longitude") String longitude);
+    @GET("user/location/{userId}/{latitude}/{longitude}")
+    Call<User> setUserLocation(@Path("userId") String userId, @Path("latitude") String latitude, @Path("longitude") String longitude);
+
+    @GET("user/status/{userId}/{status}")
+    Call<User> setUserStatus(@Path("userId") String userId, @Path("status") String status);
+
 }
 

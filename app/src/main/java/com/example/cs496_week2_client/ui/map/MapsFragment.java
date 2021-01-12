@@ -114,38 +114,35 @@ public class MapsFragment extends Fragment {
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                MarkerOptions markerOptions = new MarkerOptions();
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                LatLng latLng = new LatLng(latitude, longitude);
-                Log.i("getMyLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
-                markerOptions.position(latLng);
-                markerOptions.title("내 위치");
-                map.addMarker(markerOptions);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
-                myLocation = location;
-                uploadLocation();
-                getMemberLocation(map);
-            }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            MarkerOptions markerOptions = new MarkerOptions();
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+            Log.i("getMyLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
+            markerOptions.position(latLng);
+            markerOptions.title("내 위치");
+            map.addMarker(markerOptions);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
+            myLocation = location;
+            uploadLocation(latitude, longitude);
+            getMemberLocation(map);
         });
     }
 
-    private void uploadLocation() {
-        dataService.location.setUserStatusLocation(user.getId(), user.getStatus(), user.getLatitude(), user.getLongitude()).enqueue(new Callback<User>() {
+    private void uploadLocation(Double latitude, Double longitude) {
+        dataService.location.setUserLocation(user.getId(), latitude.toString(), longitude.toString()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    Log.i("SetLocation", "response is not successful");
+                    Log.e("SetLocation", "response is not successful");
                     return;
                 }
                 user = response.body();
                 if (user != null) {
                     Log.i("SetLocation", "success " + response.message());
                 }
-                else Log.e("SetLocation", "memlocation is null");
+                else Log.e("SetLocation", "user is null");
             }
 
             @Override
@@ -161,7 +158,7 @@ public class MapsFragment extends Fragment {
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
                 if (!response.isSuccessful()) {
                     Log.e("MapsFragment", "getMembers response is not successful");
-                    Toast.makeText(getContext(), "멤버들의 위치정보 불러오기 실패", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "멤버들의 위치정보를 불러올 수 없습니다", Toast.LENGTH_SHORT);
                     return;
                 }
 
