@@ -71,7 +71,7 @@ public class MyPageFragment extends Fragment {
         // Set views using user information
         nameView.setText(user.getNickName());
         numView.setText(user.getPhoneNum());
-        Glide.with(this).load("http://192.249.18.231/image" + user.getProfilePath()).into(preview);
+        Glide.with(this).load("http://192.249.18.231/image/" + user.getProfilePath()).into(preview);
 
         // Set leave button
         leaveButton.setOnClickListener(new View.OnClickListener() {

@@ -28,7 +28,7 @@ public class UserUtils {
     public static User parseUserIntent(Intent intent) {
         User user = new User();
 
-        user.setNickName(intent.getStringExtra("nickname"));
+        user.setNickName(intent.getStringExtra("nickName"));
         user.setId(intent.getStringExtra("userId"));
         user.setPhoneNum(intent.getStringExtra("phoneNum"));
         user.setStatus(intent.getStringExtra("status"));
@@ -64,7 +64,7 @@ public class UserUtils {
 
     public static User parseUserBundleGetUser(Bundle bundle) {
         User user = new User();
-        user.setNickName(bundle.getString("nickname"));
+        user.setNickName(bundle.getString("nickName"));
         user.setId(bundle.getString("userId"));
         user.setPhoneNum(bundle.getString("phoneNum"));
         user.setStatus(bundle.getString("status"));
@@ -93,7 +93,7 @@ public class UserUtils {
         fakeUser.setId("fake token");
         fakeUser.setPhoneNum("01012345678");
         fakeUser.setStatus("밥먹는중");
-        fakeUser.setProfilePath("/abc1610263375412.JPEG");
+        fakeUser.setProfilePath("abc1610263375412.JPEG");
         fakeUser.setContacts(fakeContacts);
         fakeUser.setGroupCode("W5342");
         fakeUser.setLatitude("33.323749345895884");
