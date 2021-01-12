@@ -14,8 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.MemLocation;
 import com.example.cs496_week2_client.models.User;
 import com.example.cs496_week2_client.ui.my_page.MyPageFragment;
@@ -34,6 +36,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 // TODO member list 데이터 가공해서 marker 지도에 표시하기
 // TODO marker 위에 유저 프로필 사진 glide로 받아오기
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -42,12 +45,13 @@ import retrofit2.Response;
 import retrofit2.http.Path;
 
 import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
+import static com.example.cs496_week2_client.util.UserUtils.parseUserBundleGetUser;
 
 public class MapsFragment extends Fragment {
     Location myLocation;
     FusedLocationProviderClient mFusedLocationClient;
     LocationDataService dataService;
-    String userId = " "; // TODO viewPager 에서 넘겨받기
+    User user;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -82,8 +86,9 @@ public class MapsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
-        dataService = new LocationDataService();
+        dataService = Api.getInstance().getLocationDataService();
         myLocation = new Location(LocationManager.GPS_PROVIDER);
+        user = parseUserBundleGetUser(getArguments());
     }
 
     @Nullable
@@ -124,32 +129,25 @@ public class MapsFragment extends Fragment {
                 map.addMarker(markerOptions);
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14F));
                 myLocation = location;
-                //uploadLocation();
+                uploadLocation();
                 getMemberLocation(map);
             }
         });
     }
 
     private void uploadLocation() {
-        HashMap<String, Object> input = new HashMap<>();
-        String location = myLocation.getProvider();
-
-        String status = "";
-        String latitude = "";
-        String longitude = "";
-
-        dataService.location.setUserStatusLocation(userId, status, latitude, longitude).enqueue(new Callback<User>() {
+        dataService.location.setUserStatusLocation(user.getId(), user.getStatus(), user.getLatitude(), user.getLongitude()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
                     Log.i("SetLocation", "response is not successful");
                     return;
                 }
-                User user = response.body();
+                user = response.body();
                 if (user != null) {
                     Log.i("SetLocation", "success " + response.message());
                 }
-                else Log.i("SetLocation", "memlocation is null");
+                else Log.e("SetLocation", "memlocation is null");
             }
 
             @Override
@@ -160,16 +158,39 @@ public class MapsFragment extends Fragment {
     }
 
     private void getMemberLocation(GoogleMap map) {
-        // TODO: get locations from server (이건 test)
-        MarkerOptions markerOptions = new MarkerOptions();
+        // TODO(완료) get locations from server
+        dataService.location.getMembers(user.getGroupCode()).enqueue(new Callback<ArrayList<User>>() {
+            @Override
+            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("MapsFragment", "getMembers response is not successful");
+                    Toast.makeText(getContext(), "멤버들의 위치정보 불러오기 실패", Toast.LENGTH_SHORT);
+                    return;
+                }
+                Log.i("MapsFragment", "getMembers");
 
-        double latitude = myLocation.getLatitude();
-        double longitude = myLocation.getLongitude() + 0.01;
+                ArrayList<User> users = response.body();
+                for (int i = 0; i < users.size(); i++) {
+                    MarkerOptions markerOptions = new MarkerOptions();
 
-        LatLng latLng = new LatLng(latitude, longitude);
-        Log.i("getMemberLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
-        markerOptions.position(latLng);
-        markerOptions.title("provider");
-        map.addMarker(markerOptions);
+                    double latitude = Double.parseDouble(users.get(i).getLatitude());
+                    double longitude = Double.parseDouble(users.get(i).getLongitude());
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    Log.i("getMemberLocation", users.get(i).getNickName());
+
+                    markerOptions.position(latLng);
+                    markerOptions.title(users.get(i).getNickName());
+                    map.addMarker(markerOptions);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                Log.e("MapsFragment", "Fail to get members");
+                Toast.makeText(getContext(), "멤버들의 위치정보 불러오기 실패", Toast.LENGTH_SHORT);
+            }
+        });
+
+
     }
 }

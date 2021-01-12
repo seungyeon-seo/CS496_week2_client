@@ -17,17 +17,13 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public class LocationDataService {
-    private String BASE_URL = "http://192.249.18.224/test/";
+    Retrofit retrofitClient;
+    LocationAPI location;
 
-    // TODO Api 안으로 옮겨서 retrofitClient 하나만 만들도록 하기
-    Retrofit retrofitClient =
-            new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(new OkHttpClient.Builder().build())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-    LocationAPI location = retrofitClient.create(com.example.cs496_week2_client.ui.map.LocationAPI.class);
+    public LocationDataService(Retrofit retrofit) {
+        retrofitClient = retrofit;
+        location  = retrofitClient.create(com.example.cs496_week2_client.ui.map.LocationAPI.class);
+    }
 }
 
 interface LocationAPI{

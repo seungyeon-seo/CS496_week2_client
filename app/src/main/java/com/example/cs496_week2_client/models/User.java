@@ -18,15 +18,40 @@ public class User {
     private String latitude;
     private String longitude;
 
-    // TODO getter, setter 만들기
-
-
     public String getNickName() {
         return nickName;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public String getProfilePath() {
+        return profilePath;
+    }
+
+    public ArrayList<String> getContacts() {
+        return contacts;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public void setId(String id) {
