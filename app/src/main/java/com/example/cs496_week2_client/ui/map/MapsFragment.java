@@ -118,15 +118,15 @@ public class MapsFragment extends Fragment {
                 setStatus(0);
             }
         });
-        statusSleep = (FloatingActionButton) view.findViewById(R.id.status_sleep);
-        statusSleep.setOnClickListener(new View.OnClickListener() {
+        statusStudy = (FloatingActionButton) view.findViewById(R.id.status_study);
+        statusStudy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setStatus(1);
             }
         });
-        statusStudy = (FloatingActionButton) view.findViewById(R.id.status_study);
-        statusStudy.setOnClickListener(new View.OnClickListener() {
+        statusSleep = (FloatingActionButton) view.findViewById(R.id.status_sleep);
+        statusSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setStatus(2);
@@ -255,6 +255,26 @@ public class MapsFragment extends Fragment {
     }
 
     private void setStatus(int stat) {
+        /* Status Code
+        *   0: food
+        *   1: study
+        *   2: sleep     */
+        dataService.location.setUserStatus(user.getId(), String.valueOf(stat)).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("Set Status", "response is not successful");
+                    return;
+                }
+                user = response.body();
+                Log.i("Set Status", user.getNickName()+"'s status is set "+user.getStatus());
+            }
 
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("Set Status", "Failed");
+                t.printStackTrace();
+            }
+        });
     }
 }
