@@ -1,11 +1,7 @@
 package com.example.cs496_week2_client.models;
 
-import com.example.cs496_week2_client.ui.contacts.Contact;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-// TODO 서버의 models/group 에 맞춰 수정
 public class User {
     private String nickName;
     private String id;
@@ -16,9 +12,6 @@ public class User {
     private ArrayList<String> contacts;
     private String latitude;
     private String longitude;
-
-    // TODO getter, setter 만들기
-
 
     public ArrayList<String> getContacts() {
         return contacts;

@@ -48,7 +48,6 @@ public class MyPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = parseUserBundleGetUser(getArguments());
-        // TODO getArguments() parse 해서 User 객체 얻기 
     }
 
     @Override

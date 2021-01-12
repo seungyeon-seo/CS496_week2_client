@@ -11,58 +11,87 @@ import java.util.ArrayList;
 public class UserUtils {
     public static Intent getUserIntent(User user) {
         Intent intent = new Intent();
+        intent.putExtra("nickName", user.getNickName());
         intent.putExtra("userId", user.getId());
+        intent.putExtra("phoneNum", user.getPhoneNum());
+        intent.putExtra("status", user.getStatus());
+        intent.putExtra("profilePath", user.getProfilePath());
+        intent.putExtra("groupCode", user.getGroupCode());
+        intent.putStringArrayListExtra("contacts", user.getContacts());
+        intent.putExtra("latitude", user.getLatitude());
+        intent.putExtra("longitude", user.getLongitude());
 
-        intent.putExtra("userId", user.getId());
         return intent;
     }
 
     public static User parseUserIntent(Intent intent) {
-        String userId = intent.getStringExtra("userId");
-        String nickname = intent.getStringExtra("nickname");
-        ArrayList<String> posts = intent.getStringArrayListExtra("posts");
-
         User user = new User();
-        user.setId(userId);
-        user.setNickName(nickname);
+
+        user.setNickName(intent.getStringExtra("nickname"));
+        user.setId(intent.getStringExtra("userId"));
+        user.setPhoneNum(intent.getStringExtra("phoneNum"));
+        user.setStatus(intent.getStringExtra("status"));
+        user.setProfilePath(intent.getStringExtra("profilePath"));
+        user.setGroupCode(intent.getStringExtra("groupCode"));
+        user.setContacts(intent.getStringArrayListExtra("contacts"));
+        user.setLatitude(intent.getStringExtra("latitude"));
+        user.setLongitude(intent.getStringExtra("longitude"));
+
         return user;
     }
 
     public static Bundle getUserBundle(User user, String token) {
         Bundle bundle = new Bundle();
+        bundle.putString("nickName", user.getNickName());
         bundle.putString("userId", user.getId());
-        bundle.putString("nickname", user.getNickName());
+        bundle.putString("phoneNum", user.getPhoneNum());
+        bundle.putString("status", user.getStatus());
+        bundle.putString("profilePath", user.getProfilePath());
+        bundle.putString("groupCode", user.getGroupCode());
+        bundle.putStringArrayList("contacts", user.getContacts());
+        bundle.putString("latitude", user.getLatitude());
+        bundle.putString("longitude", user.getLongitude());
+
         bundle.putString("token", token);
         return bundle;
     }
 
     public static User parseUserBundleGetUser(Bundle bundle) {
-        String userId = bundle.getString("userId");
-        String nickname = bundle.getString("nickname");
-        ArrayList<String> posts = bundle.getStringArrayList("posts");
-
         User user = new User();
-        user.setId(userId);
-        user.setNickName(nickname);
+        user.setNickName(bundle.getString("nickname"));
+        user.setId(bundle.getString("userId"));
+        user.setPhoneNum(bundle.getString("phoneNum"));
+        user.setStatus(bundle.getString("status"));
+        user.setProfilePath(bundle.getString("profilePath"));
+        user.setGroupCode(bundle.getString("groupCode"));
+        user.setContacts(bundle.getStringArrayList("contacts"));
+        user.setLatitude(bundle.getString("latitude"));
+        user.setLongitude(bundle.getString("longitude"));
+
         return user;
     }
 
-    public static String parseUserBundleGetToken (Bundle bundle) {
-       return bundle.getString("token");
+    public static String parseUserBundleGetToken(Bundle bundle) {
+        return bundle.getString("token");
     }
 
     public static User getFakeUser() {
         User fakeUser = new User();
 
-        ArrayList<String> fakeContacts = new ArrayList<String>();
+        ArrayList<String> fakeContacts = new ArrayList<>();
         fakeContacts.add("5ffc8ab317d84933795a33dc");
         fakeContacts.add("5ffc8ac517d84933795a33dd");
 
+        // 제주도 시민 김땡땡 씨
         fakeUser.setNickName("김땡땡");
         fakeUser.setId("id11111");
+        fakeUser.setPhoneNum("01012345678");
+        fakeUser.setStatus("밥먹는중");
+        fakeUser.setProfilePath("/upload/abc1610263375412.JPEG");
         fakeUser.setContacts(fakeContacts);
         fakeUser.setGroupCode("W5342");
-
+        fakeUser.setLatitude("33.323749345895884");
+        fakeUser.setLongitude("126.45983950440511");
 
         return fakeUser;
     }
