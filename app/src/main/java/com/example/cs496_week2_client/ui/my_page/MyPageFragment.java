@@ -19,6 +19,7 @@ import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.User;
 import com.example.cs496_week2_client.ui.login.LoginActivity;
+import com.example.cs496_week2_client.ui.login.RegisterActivity;
 import com.example.cs496_week2_client.ui.login.UserService;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -88,7 +89,7 @@ public class MyPageFragment extends Fragment {
                             return;
                         }
                         Log.i("MyPageFragment", "Exit Group Response");
-                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        Intent intent = new Intent(getContext(), RegisterActivity.class);
                         startActivity(intent);
                     }
 
