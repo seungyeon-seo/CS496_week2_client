@@ -1,8 +1,13 @@
 package com.example.cs496_week2_client.ui.login;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,8 +26,10 @@ import com.example.cs496_week2_client.util.ResponseCode;
 import com.example.cs496_week2_client.util.UserUtils;
 import com.facebook.AccessToken;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     TextInputLayout codeWrapper;
     TextInputLayout groupNameWrapper;
-
+    ImageView imagePreview;
     TextView createGroupText;
     TextView joinGroupText;
     User user;
@@ -64,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         userService = Api.getInstance().getUserService();
 
         Button submitButton = findViewById(R.id.nickname_submit_button);
-        ImageView imagePreview = findViewById(R.id.image_preview);
+        imagePreview = findViewById(R.id.image_preview);
         Button imageSelectButton = findViewById(R.id.image_select_button);
 
         nicknameEditText = findViewById(R.id.nickname_edit_text);
@@ -288,10 +295,36 @@ public class RegisterActivity extends AppCompatActivity {
             Log.i("UploadImageActivity", "인텐트가 안왔습니다");
         else if (resultCode == RESULT_OK) {
             Log.i("UploadImageActivity", "갤러리에서 사진 선택했습니다");
-            Uri selectedImage = data.getData();
-            selectedUri = selectedImage;
+            Uri selectedUri = data.getData();
+
+            // TODO imageData 를 preview image 에 보여주기
+//            Log.i("RegisterActivity", String.valueOf(selectedUri));
+//            File fileLocation = new File(String.valueOf(selectedUri));
+//            Picasso.get().load(fileLocation).into(imagePreview);
+//            String uriExample = "content://media/external/images/media/12897";
+
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//            Cursor cursor = getContentResolver().query(selectedUri,
+//                    filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            String picturePath = cursor.getString(columnIndex);
+//            cursor.close();
+//            imagePreview.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
             try {
-                InputStream inputStream = getContentResolver().openInputStream(selectedImage);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedUri);
+                bitmap = Bitmap.createScaledBitmap(bitmap,  600 ,600, true);
+                imagePreview.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(selectedUri);
                 byte[] buffer = new byte[1024];
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(buffer.length);
                 int len = 0;
@@ -300,7 +333,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 imageData = byteArrayOutputStream.toByteArray();
                 Log.i("UploadImageActivity", "이미지 데이터 만듦 " + imageData.length);
-                // TODO imageData 를 preview image 에 보여주기
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
