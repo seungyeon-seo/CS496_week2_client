@@ -20,12 +20,12 @@ import com.google.android.material.imageview.ShapeableImageView;
 import org.w3c.dom.Text;
 
 import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
+import static com.example.cs496_week2_client.util.UserUtils.parseUserBundleGetUser;
 
 public class MyPageFragment extends Fragment {
     TextView nameView, numView, leaveButton;
     ShapeableImageView preview;
-
-
+    
     User user;
     String token;
 
@@ -33,21 +33,22 @@ public class MyPageFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-//    public static MyPageFragment newInstance(User user, String token) {
-//        MyPageFragment myPageFragment = new MyPageFragment();
-//        myPageFragment.setArguments(getUserBundle(user, token));
-//        return myPageFragment;
-//    }
+    public static MyPageFragment newInstance(User user, String token) {
+        MyPageFragment myPageFragment = new MyPageFragment();
+        myPageFragment.setArguments(getUserBundle(user, token));
+        return myPageFragment;
+    }
 
     // temporary function
-    public static MyPageFragment newInstance() {
-        return new MyPageFragment();
-    }
+//    public static MyPageFragment newInstance(User user, String token) {
+//        return new MyPageFragment();
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = parseUserBundleGetUser(getArguments());
+        // TODO getArguments() parse 해서 User 객체 얻기 
     }
 
     @Override
@@ -63,9 +64,9 @@ public class MyPageFragment extends Fragment {
         leaveButton = (TextView) view.findViewById(R.id.leave_button);
 
         // Set views using user information
-        // TODO: load user info from server
+        // TODO user 객체 정보로부터 뷰 설정하기.setText("제니");
 
-        nameView.setText("제니");
+        nameView
         numView.setText("010-1234-5678");
         Glide.with(this).load("http://img.wkorea.com/w/2020/01/style_5e28242002d20-539x700.jpg").into(preview);
 

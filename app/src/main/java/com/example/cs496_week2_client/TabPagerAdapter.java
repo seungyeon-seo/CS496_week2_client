@@ -38,13 +38,11 @@ public class TabPagerAdapter extends FragmentStateAdapter {
             // TODO 모든 Fragment 에 user 객체 넘겨주기
             case 0:
             default:
-                return ContactFragment.newInstance();
+                return ContactFragment.newInstance(user, token);
             case 1:
-                return MapsFragment.newInstance();
+                return MapsFragment.newInstance(user, token);
             case 2:
-                return MyPageFragment.newInstance();
-                // TODO
-                //return MyPageFragment.newInstance(user, token);
+                return MyPageFragment.newInstance(user, token);
         }
     }
 

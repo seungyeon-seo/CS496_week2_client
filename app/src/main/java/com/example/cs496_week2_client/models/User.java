@@ -15,9 +15,6 @@ public class User {
     private String groupCode;
     private ArrayList<String> contacts;
 
-
-    private String location; // TODO 이것만 남기거나 위도 경도만 남기거나 선택
-
     private String latitude;
     private String longitude;
 

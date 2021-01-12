@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.models.MemLocation;
 import com.example.cs496_week2_client.models.User;
+import com.example.cs496_week2_client.ui.my_page.MyPageFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +40,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Path;
+
+import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
 
 public class MapsFragment extends Fragment {
     Location myLocation;
@@ -63,10 +66,17 @@ public class MapsFragment extends Fragment {
         }
     };
 
-    public static Fragment newInstance() {
-        MapsFragment fragment = new MapsFragment();
-        return fragment;
+//    public static MapsFragment newInstance() {
+//        MapsFragment fragment = new MapsFragment();
+//        return fragment;
+//    }
+
+    public static MapsFragment newInstance(User user, String token) {
+        MapsFragment mapsFragment = new MapsFragment();
+        mapsFragment.setArguments(getUserBundle(user, token));
+        return mapsFragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
