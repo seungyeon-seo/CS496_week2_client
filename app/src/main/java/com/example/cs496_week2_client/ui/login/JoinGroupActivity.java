@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.Group;

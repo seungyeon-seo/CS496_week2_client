@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.User;
@@ -64,7 +66,16 @@ public class MyPageFragment extends Fragment {
         if (user.getGroupCode() == "0") {
             Intent intent = new Intent(getContext(), JoinGroupActivity.class);
             intent.putExtra("userId", user.getId());
-            startActivity(intent);
+            startActivityForResult(intent, 1001);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001) {
+            MainActivity main = (MainActivity) getActivity();
+            main.setFragment2();
         }
     }
 
@@ -79,6 +90,8 @@ public class MyPageFragment extends Fragment {
         numView = view.findViewById(R.id.phone_num);
         preview = view.findViewById(R.id.image_preview);
         leaveButton = view.findViewById(R.id.leave_button);
+        if (user.getGroupCode() == "0") leaveButton.setText("그룹 가입");
+        else leaveButton.setText("그룹 탈퇴");
         inviteButton = view.findViewById(R.id.group_invite_button);
         // Set views using user information
         nameView.setText(user.getNickName());

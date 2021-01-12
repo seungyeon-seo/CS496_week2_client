@@ -52,20 +52,6 @@
             android:gravity="center_vertical"
             tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/statusView"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="220dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/status_chip"
-            android:text="No Group"
-            android:fontFamily="@font/gmarketsansmedium"
-            android:textSize="12dp"
-            android:gravity="center"
-            android:textColor="@color/white"
-            />
-
         <ImageButton
             android:id="@+id/callButton"
             android:layout_width="40dp"

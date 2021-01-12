@@ -344,6 +344,7 @@ public class MapsFragment extends Fragment {
                 user = response.body();
                 MainActivity main = (MainActivity) getActivity();
                 main.setFragment2();
+                main.setViewPager(1);
                 Log.i("Set Status", user.getNickName() + "'s status is set " + user.getStatus());
             }
 

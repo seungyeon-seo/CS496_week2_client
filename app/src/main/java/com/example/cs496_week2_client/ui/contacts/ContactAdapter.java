@@ -42,7 +42,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     // ViewHolder: store item view
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView nameView, numView, statusView;
+        TextView nameView, numView;
         ImageButton callButton;
 
         ViewHolder(View itemView) {
@@ -52,7 +52,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             nameView = itemView.findViewById(R.id.nameTextView);
             numView = itemView.findViewById(R.id.numTextView);
             callButton = (ImageButton) itemView.findViewById(R.id.callButton);
-            statusView = itemView.findViewById(R.id.statusView);
 
             // Click event for itemView
             itemView.setOnClickListener(new View.OnClickListener() {

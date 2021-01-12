@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity
 
     public void setFragment2() {
         fragment2 = MapsFragment.newInstance(user, token);
-        setViewPager(1);
     }
 
     @Override
