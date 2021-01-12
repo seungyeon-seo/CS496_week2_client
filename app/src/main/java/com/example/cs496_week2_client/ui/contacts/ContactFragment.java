@@ -21,10 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_week2_client.MainActivity;
 import com.example.cs496_week2_client.R;
+import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.databinding.FragmentContactBinding;
+import com.example.cs496_week2_client.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
 
 public class ContactFragment extends Fragment {
     View view;
@@ -34,7 +38,7 @@ public class ContactFragment extends Fragment {
     LayoutInflater initInflater;
     ViewGroup initContainer;
     Bundle initSavedInstanceState;
-    ContactDataService dataService;
+    ContactService dataService;
 
     // For view model
     ContactViewModel viewModel;
@@ -46,17 +50,17 @@ public class ContactFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ContactFragment newInstance() {
+    public static ContactFragment newInstance(User user, String token) {
         // no arguments
-        ContactFragment fragment = new ContactFragment();
-        return fragment;
+        ContactFragment contactFragment = new ContactFragment();
+        contactFragment.setArguments(getUserBundle(user, token));
+        return contactFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO Api 에서 받아오기
-        dataService = new ContactDataService();
+        dataService = Api.getInstance().getContactService();
     }
 
     @Override
@@ -94,10 +98,8 @@ public class ContactFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         viewModel.contacts.observe(getViewLifecycleOwner(), (ArrayList<Contact> data)-> {
             Log.i("ContactFragment", "in observe function "+data.size());
-            if (data != null) {
-                adapter.setData(data);
-                adapter.notifyDataSetChanged();
-            }
+            adapter.setData(data);
+            adapter.notifyDataSetChanged();
         });
 
         // Init SearchView
@@ -121,14 +123,14 @@ public class ContactFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CreateActivity.class);
-                startActivityForResult(intent, 10001);
+                Intent intent = new Intent(getContext(), ContactCreateActivity.class);
+                startActivityForResult(intent, RequestCode.CREATE_NEW_CONTACT);
             }
         });
 
-        // Init synchButton
-        ImageButton synchButton = binding.synchButton;
-        synchButton.setOnClickListener(new View.OnClickListener() {
+        // Init sync Button
+        ImageButton syncButton = binding.synchButton;
+        syncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
@@ -148,8 +150,7 @@ public class ContactFragment extends Fragment {
             MainActivity main = (MainActivity) getActivity();
             switch (requestCode) {
                 // createButton click
-                // TODO requestCode class 로 리팩토링
-                case 10001:
+                case RequestCode.CREATE_NEW_CONTACT:
                     main.setViewPager(0);
                     Bundle bundle = data.getExtras();
                     viewModel.getContacts();
@@ -157,9 +158,10 @@ public class ContactFragment extends Fragment {
                     if (ct != null) viewModel.postContact(ct);
                     else Log.e("Contact Creation", "Fail to create contact");
                     break;
+                default:
+                    Log.e("ContactFragment", "해당 requestCode 는 존재하지 않습니다 : " + requestCode);
             }
         }
-
     }
 
     private Contact findContact(String name) {
@@ -171,4 +173,9 @@ public class ContactFragment extends Fragment {
         Log.e("findContact", "return null");
         return null;
     }
+}
+
+class RequestCode {
+    static final int CREATE_NEW_CONTACT = 1;
+
 }

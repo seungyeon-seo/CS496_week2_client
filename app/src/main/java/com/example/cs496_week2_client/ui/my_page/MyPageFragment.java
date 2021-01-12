@@ -65,8 +65,6 @@ public class MyPageFragment extends Fragment {
 
         // Set views using user information
         // TODO user 객체 정보로부터 뷰 설정하기.setText("제니");
-
-        nameView
         numView.setText("010-1234-5678");
         Glide.with(this).load("http://img.wkorea.com/w/2020/01/style_5e28242002d20-539x700.jpg").into(preview);
 

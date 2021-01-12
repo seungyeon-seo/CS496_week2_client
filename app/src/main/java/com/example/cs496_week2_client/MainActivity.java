@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity
 //        startActivityForResult(loginIntent, RequestCode.LOGIN_REQUEST_CODE);
 
         // 로그인 없이 실행
-        User fakeUser = new User(); // TODO Login, Register 없이 유저 만들어서 테스트
+        User fakeUser = UserUtils.getFakeUser();
+        // TODO Login, Register 없이 유저 만들어서 테스트
         String fakeToken = "fake token";
+
         initViewPager(fakeUser, fakeToken);
-
-
         super.onCreate(savedInstanceState);
     }
 

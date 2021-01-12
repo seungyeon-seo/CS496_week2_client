@@ -73,7 +73,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.contacts.CreateActivity"
+            android:name=".ui.contacts.ContactCreateActivity"
             android:label="연락처 추가" />
         <activity android:name=".ui.contacts.ContactInfoActivity" />
 

@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.cs496_week2_client.R;
-import com.example.cs496_week2_client.models.MemLocation;
 import com.example.cs496_week2_client.models.User;
 import com.example.cs496_week2_client.ui.my_page.MyPageFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,12 +41,13 @@ import retrofit2.Response;
 import retrofit2.http.Path;
 
 import static com.example.cs496_week2_client.util.UserUtils.getUserBundle;
+import static com.example.cs496_week2_client.util.UserUtils.parseUserBundleGetUser;
 
 public class MapsFragment extends Fragment {
     Location myLocation;
     FusedLocationProviderClient mFusedLocationClient;
     LocationDataService dataService;
-    String userId = " "; // TODO viewPager 에서 넘겨받기
+    User user;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -81,6 +81,7 @@ public class MapsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = parseUserBundleGetUser(getArguments());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
         dataService = new LocationDataService();
         myLocation = new Location(LocationManager.GPS_PROVIDER);
@@ -131,23 +132,13 @@ public class MapsFragment extends Fragment {
     }
 
     private void uploadLocation() {
-        HashMap<String, Object> input = new HashMap<>();
-        String location = myLocation.getProvider();
-
-        String status = "";
-        String latitude = "";
-        String longitude = "";
-
-        dataService.location.setUserStatusLocation(userId, status, latitude, longitude).enqueue(new Callback<User>() {
+        dataService.location.setUserStatusLocation(user.getId() , user.getStatus(), user.getLatitude(), user.getLongitude()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful()) {
-                    Log.i("SetLocation", "response is not successful");
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    Log.i("SetLocation", "user: " + user + "\nmessage: " + response.message());
                     return;
-                }
-                User user = response.body();
-                if (user != null) {
-                    Log.i("SetLocation", "success " + response.message());
                 }
                 else Log.i("SetLocation", "memlocation is null");
             }

@@ -7,13 +7,13 @@ import com.example.cs496_week2_client.models.User;
 
 import java.util.ArrayList;
 
+// TODO 변경된 User 모델에 맞춰 메소드 손보기
 public class UserUtils {
-    public static Intent getUserIntent(String userId, String nickname, ArrayList<String> posts, String token) {
+    public static Intent getUserIntent(User user) {
         Intent intent = new Intent();
-        intent.putExtra("userId", userId);
-        intent.putExtra("nickname", nickname);
-        intent.putExtra("posts", posts);
-        intent.putExtra("token", token);
+        intent.putExtra("userId", user.getId());
+
+        intent.putExtra("userId", user.getId());
         return intent;
     }
 
@@ -25,7 +25,6 @@ public class UserUtils {
         User user = new User();
         user.setId(userId);
         user.setNickName(nickname);
-        user.setPosts(posts);
         return user;
     }
 
@@ -33,7 +32,6 @@ public class UserUtils {
         Bundle bundle = new Bundle();
         bundle.putString("userId", user.getId());
         bundle.putString("nickname", user.getNickName());
-        bundle.putStringArrayList("posts", user.getPosts());
         bundle.putString("token", token);
         return bundle;
     }
@@ -46,12 +44,27 @@ public class UserUtils {
         User user = new User();
         user.setId(userId);
         user.setNickName(nickname);
-        user.setPosts(posts);
         return user;
     }
 
     public static String parseUserBundleGetToken (Bundle bundle) {
        return bundle.getString("token");
+    }
+
+    public static User getFakeUser() {
+        User fakeUser = new User();
+
+        ArrayList<String> fakeContacts = new ArrayList<String>();
+        fakeContacts.add("5ffc8ab317d84933795a33dc");
+        fakeContacts.add("5ffc8ac517d84933795a33dd");
+
+        fakeUser.setNickName("김땡땡");
+        fakeUser.setId("id11111");
+        fakeUser.setContacts(fakeContacts);
+        fakeUser.setGroupCode("W5342");
+
+
+        return fakeUser;
     }
 
 }

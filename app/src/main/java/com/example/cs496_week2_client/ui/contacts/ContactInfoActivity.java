@@ -3,7 +3,6 @@ package com.example.cs496_week2_client.ui.contacts;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cs496_week2_client.R;
-
-import org.w3c.dom.Text;
 
 public class ContactInfoActivity extends AppCompatActivity {
     ImageView imageView;
@@ -57,36 +54,3 @@ public class ContactInfoActivity extends AppCompatActivity {
 
     }
 }
-
-
-/*
-class PhoneBookShowActivity : AppCompatActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_phone_book_show)
-
-        val phoneBookShowImage: ImageView = phone_show_image
-        val phoneBookShowName: TextView = phone_show_name
-        val phoneBookShowNum: TextView = phone_show_phone_number
-
-        val bundle: Bundle = intent.extras!!
-
-        val profileImage = bundle.getInt("ProfileImage")
-        val colorFilter = bundle.getString("ColorFilter")
-        val name = bundle.getString("Name")
-        val phoneNumber = bundle.getString("PhoneNumber")
-
-        phoneBookShowImage.setImageResource(profileImage)
-        phoneBookShowImage.setColorFilter(Color.parseColor(colorFilter))
-        phoneBookShowName.text = name
-        phoneBookShowNum.text = phoneNumber
-
-        phone_show_phone_btn.setOnClickListener{
-        val uri = Uri.parse("tel:${phoneNumber.toString()}")
-        val intent = Intent(Intent.ACTION_CALL, uri)
-        startActivity(intent)
-        }
-        }
-        }
-
- */
