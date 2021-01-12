@@ -28,4 +28,8 @@ interface ContactAPI{
 
     @POST("contact/insert/{userId}")
     Call<Contact> insertContact(@Body HashMap<String, Object> param, @Path("userId") String userId);
+
+    // TODO 서버에 연락처 한번에 올리기
+    @POST("contact/insertAll/{userId}")
+    Call<Contact> insertContactAll(@Body HashMap<String, Object> param, @Path("userId") String userId);
 }

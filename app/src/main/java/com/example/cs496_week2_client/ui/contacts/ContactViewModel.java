@@ -128,7 +128,25 @@ public class ContactViewModel extends ViewModel {
         });
     }
 
-    public void postContact(Contact contact) {
+    // TODO 서버에 연락처 한 번에 올리기
+//    public void postContactAll(ArrayList<Contact> contacts) {
+//        Log.i("PostContact", "start function about "+contact.getFullName());
+//        // Set input for server
+//        HashMap<String, Object> input = new HashMap<>();
+//        input.put("fullName", contact.getFullName());
+//        input.put("phone", contact.getPhone());
+//        input.put("personId", contact.getPersonId());
+//        input.put("image", contact.getImage());
+//
+//
+//        contactService.contact.insertContactAll(input, user.getId()).enqueue(new Callback<Contact>() {
+//
+//
+//        }
+//    }
+
+
+        public void postContact(Contact contact) {
         Log.i("PostContact", "start function about "+contact.getFullName());
         // Set input for server
         HashMap<String, Object> input = new HashMap<>();
