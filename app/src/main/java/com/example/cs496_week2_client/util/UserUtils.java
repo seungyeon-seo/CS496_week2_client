@@ -93,7 +93,7 @@ public class UserUtils {
         fakeUser.setId("fake token");
         fakeUser.setPhoneNum("01012345678");
         fakeUser.setStatus("밥먹는중");
-        fakeUser.setProfilePath("/upload/abc1610263375412.JPEG");
+        fakeUser.setProfilePath("/abc1610263375412.JPEG");
         fakeUser.setContacts(fakeContacts);
         fakeUser.setGroupCode("W5342");
         fakeUser.setLatitude("33.323749345895884");
