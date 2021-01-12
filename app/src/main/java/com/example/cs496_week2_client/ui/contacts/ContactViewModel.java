@@ -15,6 +15,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.ContactModel;
 
 import java.util.ArrayList;
@@ -28,11 +29,12 @@ import retrofit2.Response;
 public class ContactViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Contact>> contacts;
     Activity activity;
-    ContactDataService dataService;
+    ContactService contactService;
+    String userId = "userIdExample"; // TODO ContactFragment 에서 넘겨받기
 
     ContactViewModel(Activity act){
         activity = act;
-        dataService = new ContactDataService();
+        contactService = Api.getInstance().getContactService();
         contacts = new MutableLiveData<ArrayList<Contact>>();
         contacts.setValue(new ArrayList<Contact>());
         getContacts();
@@ -86,8 +88,7 @@ public class ContactViewModel extends ViewModel {
     }
 
     private void getContactsServer() {
-        // TODO userId 포함하여 getContact 호출
-        dataService.select.getContacts().enqueue(new Callback<ArrayList<ContactModel>>() {
+        contactService.contact.getContacts(userId).enqueue(new Callback<ArrayList<ContactModel>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<ArrayList<ContactModel>> call,
@@ -136,9 +137,7 @@ public class ContactViewModel extends ViewModel {
         input.put("status", contact.status);
         if(contact.location != null) input.put("location", contact.location.getProvider());
 
-        // Init PUT function
-        // TODO userId 포함하여 insertContact 호출
-        dataService.insert.insertContact(input).enqueue(new Callback<ContactModel>() {
+        contactService.contact.insertContact(input, userId).enqueue(new Callback<ContactModel>() {
             @Override
             public void onResponse(Call<ContactModel> call, Response<ContactModel> response) {
                 Log.d("InsertContact", "on Response");

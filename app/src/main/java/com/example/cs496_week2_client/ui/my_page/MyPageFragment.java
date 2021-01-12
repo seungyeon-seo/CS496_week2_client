@@ -26,16 +26,8 @@ public class MyPageFragment extends Fragment {
     ShapeableImageView preview;
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     User user;
     String token;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public MyPageFragment() {
         // Required empty public constructor
@@ -56,10 +48,6 @@ public class MyPageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -76,6 +64,7 @@ public class MyPageFragment extends Fragment {
 
         // Set views using user information
         // TODO: load user info from server
+
         nameView.setText("제니");
         numView.setText("010-1234-5678");
         Glide.with(this).load("http://img.wkorea.com/w/2020/01/style_5e28242002d20-539x700.jpg").into(preview);

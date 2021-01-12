@@ -3,6 +3,7 @@ package com.example.cs496_week2_client.ui.contacts;
 import android.location.Location;
 import android.util.Log;
 
+// TODO ContactModel 과 Contact 통합. 필요 없는 건 아예 없애기
 public class Contact implements Comparable<Contact> {
     String phone, fullName, lookup = null;
     long personId;

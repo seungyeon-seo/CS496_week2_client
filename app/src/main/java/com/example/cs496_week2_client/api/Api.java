@@ -1,5 +1,6 @@
 package com.example.cs496_week2_client.api;
 
+import com.example.cs496_week2_client.ui.contacts.ContactService;
 import com.example.cs496_week2_client.ui.login.UserService;
 
 import okhttp3.OkHttpClient;
@@ -14,6 +15,7 @@ public class Api {
 
     // retrofit 을 이용해서 만드는 서비스 (서버의 routes 에 해당)
     private UserService UserService; // 로그인, 회원가입
+    private ContactService ContactService;
 
 
     public static Api getInstance() {
@@ -39,10 +41,12 @@ public class Api {
 
         // 서비스 초기화
         this.UserService = new UserService(retrofitClient);
+        this.ContactService = new ContactService(retrofitClient);
     }
 
 
     public UserService getUserService() {
         return this.UserService;
     }
+    public ContactService getContactService() { return this.ContactService;}
 }

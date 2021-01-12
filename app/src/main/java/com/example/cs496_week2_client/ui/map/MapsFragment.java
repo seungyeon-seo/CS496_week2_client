@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.models.MemLocation;
+import com.example.cs496_week2_client.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-// TODO gms 모듈 gradle 파일에 추가 
 // TODO 뷰모델 만들어서 group/members API로 받아온 member list 받아오도록 하기
 // TODO member list 데이터 가공해서 marker 지도에 표시하기
 // TODO marker 위에 유저 프로필 사진 glide로 받아오기
@@ -38,11 +38,13 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Path;
 
 public class MapsFragment extends Fragment {
     Location myLocation;
     FusedLocationProviderClient mFusedLocationClient;
     LocationDataService dataService;
+    String userId = " "; // TODO viewPager 에서 넘겨받기
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -120,24 +122,28 @@ public class MapsFragment extends Fragment {
 
     private void uploadLocation() {
         HashMap<String, Object> input = new HashMap<>();
-        input.put("location", myLocation.getProvider());
-        input.put("name", "제니"); //TODO : user의 이름 받아와서 넣어주기
-        dataService.update.setLocation(input).enqueue(new Callback<MemLocation>() {
+        String location = myLocation.getProvider();
+
+        String status = "";
+        String latitude = "";
+        String longitude = "";
+
+        dataService.location.setUserStatusLocation(userId, status, latitude, longitude).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<MemLocation> call, Response<MemLocation> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
                     Log.i("SetLocation", "response is not successful");
                     return;
                 }
-                MemLocation memLocation = response.body();
-                if (memLocation != null) {
+                User user = response.body();
+                if (user != null) {
                     Log.i("SetLocation", "success " + response.message());
                 }
                 else Log.i("SetLocation", "memlocation is null");
             }
 
             @Override
-            public void onFailure(Call<MemLocation> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.e("SetLocation", "Fail to set location");
             }
         });
@@ -149,6 +155,7 @@ public class MapsFragment extends Fragment {
 
         double latitude = myLocation.getLatitude();
         double longitude = myLocation.getLongitude() + 0.01;
+
         LatLng latLng = new LatLng(latitude, longitude);
         Log.i("getMemberLocation", String.valueOf(latitude)+" "+String.valueOf(longitude));
         markerOptions.position(latLng);

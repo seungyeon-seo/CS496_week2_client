@@ -1,16 +1,28 @@
 package com.example.cs496_week2_client.models;
 
+import com.example.cs496_week2_client.ui.contacts.Contact;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 // TODO 서버의 models/group 에 맞춰 수정
 public class User {
     private String nickName;
     private String id;
-    private ArrayList<String> posts;
+    private String phoneNum;
+    private String status;
+    private String profilePath;
+    private String groupCode;
+    private ArrayList<String> contacts;
 
-    public ArrayList<String> getPosts() {
-        return posts;
-    }
+
+    private String location; // TODO 이것만 남기거나 위도 경도만 남기거나 선택
+
+    private String latitude;
+    private String longitude;
+
+    // TODO getter, setter 만들기
+
 
     public String getNickName() {
         return nickName;
@@ -28,7 +40,4 @@ public class User {
         this.nickName = nickName;
     }
 
-    public void setPosts(ArrayList<String> posts) {
-        this.posts = posts;
-    }
 }

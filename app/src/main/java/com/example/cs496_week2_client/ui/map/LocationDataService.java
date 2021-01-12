@@ -1,6 +1,7 @@
 package com.example.cs496_week2_client.ui.map;
 
 import com.example.cs496_week2_client.models.MemLocation;
+import com.example.cs496_week2_client.models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public class LocationDataService {
     private String BASE_URL = "http://192.249.18.224/test/";
@@ -25,18 +27,14 @@ public class LocationDataService {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-    SelectAPI select = retrofitClient.create(com.example.cs496_week2_client.ui.map.SelectAPI.class);
-    UpdateAPI update = retrofitClient.create(com.example.cs496_week2_client.ui.map.UpdateAPI.class);
+    LocationAPI location = retrofitClient.create(com.example.cs496_week2_client.ui.map.LocationAPI.class);
 }
 
-interface SelectAPI{
-    // TODO 서버 API 에 맞춰서 수정
-    @GET("group/members")
-    Call<ArrayList<MemLocation>> getLocations();
+interface LocationAPI{
+    @GET("group/members/{groupCode}")
+    Call<ArrayList<User>> getMembers(@Path("groupCode") String groupCode);
+
+    @GET("user/sync/{userId}/{status}/{latitude}/{longitude}")
+    Call<User> setUserStatusLocation(@Path("userId") String userId, @Path("status") String status, @Path("latitude") String latitude, @Path("longitude") String longitude);
 }
 
-interface UpdateAPI{
-    // TODO 서버 API 에 맞춰서 수정
-    @PUT("user/sync")
-    Call<MemLocation> setLocation(@Body HashMap<String, Object> param);
-}
