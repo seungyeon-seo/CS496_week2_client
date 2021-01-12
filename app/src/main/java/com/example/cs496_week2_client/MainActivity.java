@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -16,11 +17,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.cs496_week2_client.models.User;
+import com.example.cs496_week2_client.ui.contacts.ContactFragment;
 import com.example.cs496_week2_client.ui.login.LoginActivity;
 import com.example.cs496_week2_client.ui.login.RegisterActivity;
+import com.example.cs496_week2_client.ui.map.MapsFragment;
+import com.example.cs496_week2_client.ui.my_page.MyPageFragment;
 import com.example.cs496_week2_client.util.RequestCode;
 import com.example.cs496_week2_client.util.ResponseCode;
 import com.example.cs496_week2_client.util.UserUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -37,8 +42,7 @@ public class MainActivity extends AppCompatActivity
     public int[] grandResults = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 
     /* Tab variables */
-    private ViewPager2 viewPager;
-    TabPagerAdapter fgAdapter;
+    Fragment fragment1, fragment2, fragment3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         GetPermission();
         onRequestPermissionsResult(PERMISSIONS_REQUEST_CODE, REQUIRED_PERMISSIONS, grandResults);
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // TODO LoginActivity, RegisterActivity 잘 실행되는지 확인
@@ -60,40 +65,29 @@ public class MainActivity extends AppCompatActivity
         // TODO Login, Register 없이 유저 만들어서 테스트
         String fakeToken = "fake token";
 
-        initViewPager(fakeUser, fakeToken);
-        super.onCreate(savedInstanceState);
+        initTabLayout(fakeUser, fakeToken);
     }
 
-    private void initViewPager(User user, String token) {
+    private void initTabLayout(User user, String token) {
         // TabLayout Initialization
         TabLayout tabLayout = findViewById(R.id.tabs);
 
         // ViewPager Initialization
-        viewPager = findViewById(R.id.pager);
-        fgAdapter = new TabPagerAdapter(this, 3, user, token);
-        viewPager.setAdapter(fgAdapter);
+        fragment1 = ContactFragment.newInstance(user, token);
+        fragment2 = MapsFragment.newInstance(user, token);
+        fragment3 = MyPageFragment.newInstance(user, token);
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText("CONTACT");
-                    break;
-                case 1:
-                    tab.setText("GALLERY");
-                    break;
-                case 2:
-                default:
-                    tab.setText("FEED");
-                    break;
-            }
-            viewPager.setCurrentItem(0);
-        }).attach();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment1).commit();
+
+        tabLayout.addTab(tabLayout.newTab().setText("Contact"));
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
+        tabLayout.addTab(tabLayout.newTab().setText("Feed"));
 
         // TabSelectedListener Initialization
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                setViewPager(tab.getPosition());
             }
 
             @Override
@@ -107,8 +101,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setViewPager(int pos) {
-        viewPager.setAdapter(fgAdapter);
-        viewPager.setCurrentItem(pos);
+        Fragment selected = null;
+        switch (pos) {
+            case 0:
+            default:
+                selected = fragment1;
+                break;
+            case 1:
+                selected = fragment2;
+                break;
+            case 2:
+                selected = fragment3;
+                break;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
     }
 
     @Override
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity
                 String token = UserUtils.parseUserIntentGetToken(data);
                 User user = UserUtils.parseUserIntent(data);
                 Log.i("MainActivity", "Login 성공 - nickName: " + user.getNickName());
-                initViewPager(user, token);
+                initTabLayout(user, token);
                 break;
             case ResponseCode.REGISTER_REQUIRED: // Register Activity 시작
                 Intent registerIntent = new Intent(this, RegisterActivity.class);
@@ -149,7 +155,7 @@ public class MainActivity extends AppCompatActivity
             String token = UserUtils.parseUserIntentGetToken(data);
             User user = UserUtils.parseUserIntent(data);
             Log.i("MainActivity", "Register 성공 - nickName: " + user.getNickName());
-            initViewPager(user, token);
+            initTabLayout(user, token);
         } else {
             Log.e("MainActivity", "Register 실패");
             finish();
