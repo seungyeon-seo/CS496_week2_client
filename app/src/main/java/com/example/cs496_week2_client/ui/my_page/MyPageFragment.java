@@ -1,6 +1,7 @@
 package com.example.cs496_week2_client.ui.my_page;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.cs496_week2_client.R;
 import com.example.cs496_week2_client.api.Api;
 import com.example.cs496_week2_client.models.User;
+import com.example.cs496_week2_client.ui.login.JoinGroupActivity;
 import com.example.cs496_week2_client.ui.login.LoginActivity;
 import com.example.cs496_week2_client.ui.login.RegisterActivity;
 import com.example.cs496_week2_client.ui.login.UserService;
@@ -55,6 +57,11 @@ public class MyPageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         user = parseUserBundleGetUser(getArguments());
         dataService = Api.getInstance().getMyService();
+        if (user.getGroupCode()== "0") {
+            Intent intent = new Intent(getContext(), JoinGroupActivity.class);
+            intent.putExtra("userId", user.getId());
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -89,7 +96,8 @@ public class MyPageFragment extends Fragment {
                             return;
                         }
                         Log.i("MyPageFragment", "Exit Group Response");
-                        Intent intent = new Intent(getContext(), RegisterActivity.class);
+                        Intent intent = new Intent(getContext(), JoinGroupActivity.class);
+                        intent.putExtra("userId", user.getId());
                         startActivity(intent);
                     }
 

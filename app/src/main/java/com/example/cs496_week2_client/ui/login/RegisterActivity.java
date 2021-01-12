@@ -170,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void joinGroup(String userId) {
+    public void joinGroup(String userId) {
         Log.i("joinGroup", "그룹에 들어가는 중");
         userService.group.joinGroup(getCode(), userId).enqueue(new Callback<Group>() {
             // 토큰 검증 결과에 따라 로그 출력
