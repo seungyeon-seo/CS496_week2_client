@@ -238,7 +238,7 @@ public class MapsFragment extends Fragment {
                     if (curUser.getLatitude() == null || curUser.getLongitude() == null)
                         continue;
 
-                    String url = "http://192.249.18.231/image/" + user.getProfilePath();
+                    String url = "http://192.249.18.231/image/" + curUser.getProfilePath();
                     Log.i("MapsFragment", url);
 
                     Glide.with(getApplicationContext()).asBitmap().load(url)
