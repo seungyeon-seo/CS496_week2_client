@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CS496 2주차</string>
+    <string name="app_name">어디야</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_settings">설정</string>
     <string name="hello_world">Hello world!</string>
