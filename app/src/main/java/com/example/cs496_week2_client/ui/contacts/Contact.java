@@ -8,21 +8,14 @@ public class Contact implements Comparable<Contact> {
     String phone, fullName, lookup = null;
     long personId;
     String image = null;
-    int groupId = -1;
-    int status = -1;
-    Location location = null;
 
     // TODO 필요 없는 정보 지우기
 
-    public Contact(String ph, String fn, String bytes, long pid, String key, int gid, int stat, Location locat) {
+    public Contact(String ph, String fn, String bytes, long pid) {
         phone = ph;
         fullName = fn;
         if (bytes != null)  image = bytes;
         personId = pid;
-        lookup = key;
-        groupId = gid;
-        status = stat;
-        location = locat;
     }
 
     /* Useful Functions */

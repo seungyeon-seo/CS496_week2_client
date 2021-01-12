@@ -71,7 +71,7 @@ public class ContactViewModel extends ViewModel {
                 long person = cursor.getLong(3);
                 String lookup = cursor.getString(4);
 
-                Contact contact = new Contact(phone, fullName, image, person, lookup, -1, -1, null);
+                Contact contact = new Contact(phone, fullName, image, person);
                 ArrayList<Contact> list = contacts.getValue();
                 if (contact.isStartWith("01")) {
                     if(!isContained(contact))
@@ -82,9 +82,7 @@ public class ContactViewModel extends ViewModel {
                 contacts.setValue(list);
             } while (cursor.moveToNext());
         }
-        if (cursor != null) {
-            cursor.close();
-        }
+        cursor.close();
     }
 
     private void getContactsServer() {
@@ -100,8 +98,7 @@ public class ContactViewModel extends ViewModel {
                     for (int i = 0; i < contactModels.size(); i++) {
                         ContactModel ctm = contactModels.get(i);
                         Contact ct = new Contact(ctm.getPhone(), ctm.getFullName(), ctm.getImage(),
-                                Long.parseLong(ctm.getPersonId()), ctm.getLookup(), ctm.getGroupId(),
-                                ctm.getStatus(), new Location(ctm.getLocation()));
+                                Long.parseLong(ctm.getPersonId()));
                         if(!isContained(ct))
                         {
                             contact.add(ct);
@@ -130,12 +127,8 @@ public class ContactViewModel extends ViewModel {
         HashMap<String, Object> input = new HashMap<>();
         input.put("fullName", contact.fullName);
         input.put("phone", contact.phone);
-        input.put("lookup", contact.lookup);
         input.put("personId", Long.toString(contact.personId));
         input.put("image", contact.image);
-        input.put("groupId", contact.groupId);
-        input.put("status", contact.status);
-        if(contact.location != null) input.put("location", contact.location.getProvider());
 
         contactService.contact.insertContact(input, userId).enqueue(new Callback<ContactModel>() {
             @Override
