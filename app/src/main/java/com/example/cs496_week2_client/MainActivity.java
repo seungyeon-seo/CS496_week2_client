@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity
 
     /* Tab variables */
     Fragment fragment1, fragment2, fragment3;
+    User user;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity
     private void initTabLayout(User user, String token) {
         // TabLayout Initialization
         TabLayout tabLayout = findViewById(R.id.tabs);
+        this.user = user;
+        this.token = token;
 
         // ViewPager Initialization
         fragment1 = ContactFragment.newInstance(user, token);
@@ -114,6 +118,11 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
+    }
+
+    public void setFragment2() {
+        fragment2 = MapsFragment.newInstance(user, token);
+        setViewPager(1);
     }
 
     @Override

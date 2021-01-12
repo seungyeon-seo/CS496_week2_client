@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -26,6 +27,8 @@ import com.example.cs496_week2_client.databinding.FragmentContactBinding;
 import com.example.cs496_week2_client.models.Contact;
 import com.example.cs496_week2_client.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -130,7 +133,7 @@ public class ContactFragment extends Fragment {
         });
 
         // Init sync Button
-        ImageButton syncButton = binding.synchButton;
+        TextView syncButton = binding.synchButton;
         syncButton.setOnClickListener(v -> {
             for (int i = 0; i < viewModel.contacts.getValue().size(); i++) {
                 viewModel.postContact(viewModel.contacts.getValue().get(i));

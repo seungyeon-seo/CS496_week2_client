@@ -46,16 +46,18 @@
             app:layout_anchorGravity="bottom|right|end"
             android:focusable="true" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/synchButton"
             android:layout_width="55dp"
             android:layout_height="55dp"
+            android:clickable="true"
             android:layout_marginLeft="305dp"
-            android:src="@drawable/synch"
-            android:scaleType="fitCenter"
-            android:tint="@color/white"
+            android:text="SYNCH"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:background="@color/fab_color"
-            android:fontFamily="@font/nanumsqure_r"
+            android:fontFamily="@font/gmarketsansmedium"
             />
     </FrameLayout>
 </layout>
