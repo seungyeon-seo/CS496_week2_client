@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.example.cs496_week2_client.R;
@@ -30,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // TODO 뷰모델 만들어서 group/members API로 받아온 member list 받아오도록 하기
 // TODO marker 위에 유저 프로필 사진 glide로 받아오기
@@ -50,6 +54,8 @@ public class MapsFragment extends Fragment {
     FusedLocationProviderClient mFusedLocationClient;
     LocationDataService dataService;
     User user;
+    FloatingActionButton statusButton, statusFood, statusSleep, statusStudy;
+    boolean isFabOpen = false;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -95,7 +101,39 @@ public class MapsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.i("MapsFragment", "onCreateView");
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        // Init status button
+        statusButton = (FloatingActionButton) view.findViewById(R.id.statusButton);
+        statusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFab();
+            }
+        });
+        statusFood = (FloatingActionButton) view.findViewById(R.id.status_food);
+        statusFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setStatus(0);
+            }
+        });
+        statusSleep = (FloatingActionButton) view.findViewById(R.id.status_sleep);
+        statusSleep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setStatus(1);
+            }
+        });
+        statusStudy = (FloatingActionButton) view.findViewById(R.id.status_study);
+        statusStudy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setStatus(2);
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -190,6 +228,33 @@ public class MapsFragment extends Fragment {
             }
         });
 
+
+    }
+
+    private void toggleFab() {
+        if (isFabOpen) {
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+            statusFood.startAnimation(animation);
+            statusStudy.startAnimation(animation);
+            statusSleep.startAnimation(animation);
+            statusFood.setClickable(false);
+            statusStudy.setClickable(false);
+            statusSleep.setClickable(false);
+            isFabOpen = false;
+        }
+        else {
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+            statusFood.startAnimation(animation);
+            statusStudy.startAnimation(animation);
+            statusSleep.startAnimation(animation);
+            statusFood.setClickable(true);
+            statusStudy.setClickable(true);
+            statusSleep.setClickable(true);
+            isFabOpen = true;
+        }
+    }
+
+    private void setStatus(int stat) {
 
     }
 }
