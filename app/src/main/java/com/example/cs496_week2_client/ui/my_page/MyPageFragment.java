@@ -82,7 +82,7 @@ public class MyPageFragment extends Fragment {
         inviteButton = view.findViewById(R.id.group_invite_button);
         // Set views using user information
         nameView.setText(user.getNickName());
-        numView.setText(user.getPhoneNum());
+        numView.setText(user.getPhone());
         inviteButton.setText("초대하기 (코드: " + user.getGroupCode() + ")");
         Glide.with(this).load("http://192.249.18.231/image/" + user.getProfilePath()).into(preview);
 

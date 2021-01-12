@@ -21,7 +21,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/item_image"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="350dp"
             android:background="#FFFFFF"
             android:padding="10dp"
             app:cardCornerRadius="10dp"
@@ -44,7 +44,7 @@
                         android:id="@+id/nickname_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:importantForAutofill="no"
                         android:textSize="20sp"
@@ -56,13 +56,12 @@
                     android:id="@+id/passError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:id="@+id/phone_num"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:textSize="20sp"
                         android:fontFamily="@font/gmarketsansmedium"
@@ -72,30 +71,28 @@
 
                 <Button
                     android:id="@+id/group_invite_button"
-                    android:text="그룹 코드 (공유하기)"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:layout_margin="20dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/button_invite"
                     android:contentDescription="@string/nickname_submit_button_desc"
+                    android:fontFamily="@font/gmarketsansmedium"
+                    android:text="그룹 코드 (공유하기)"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/gmarketsansmedium" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/leave_button"
                     android:text="@string/leave_group"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:layout_margin="20dp"
                     android:background="@drawable/button_exit"
                     android:contentDescription="@string/nickname_submit_button_desc"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:fontFamily="@font/gmarketsansmedium" />
-
-
-
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -107,7 +104,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-50dp"
+        android:layout_marginTop="-40dp"
         android:background="@color/no_color"
         android:contentDescription="@string/image_preview_text"
         android:scaleType="centerCrop"
