@@ -170,10 +170,13 @@ public class MapsFragment extends Fragment {
                 ArrayList<User> users = response.body();
                 for (int i = 0;users != null && i < users.size(); i++) {
                     MarkerOptions markerOptions = new MarkerOptions();
-                    // TODO 위치가 없는 user 는 skip 하도록 바꾸기
-                    // TODO mongoDB에 위치 정보 있는 user 추가
+
+                    if (users.get(i).getLatitude() == null || users.get(i).getLongitude() == null)
+                        continue;
+
                     double latitude = Double.parseDouble(users.get(i).getLatitude());
                     double longitude = Double.parseDouble(users.get(i).getLongitude());
+
                     LatLng latLng = new LatLng(latitude, longitude);
                     Log.i("getMemberLocation", users.get(i).getNickName());
 

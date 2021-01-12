@@ -52,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     TextView createGroupText;
     TextView joinGroupText;
+    User user;
 
     int mode = Mode.JOIN_GROUP;
 
@@ -83,20 +84,24 @@ public class RegisterActivity extends AppCompatActivity {
         imageSelectButton.setOnClickListener(v -> selectImage());
 
         submitButton.setOnClickListener(v -> {
-            if (mode == Mode.JOIN_GROUP && getCode().length() != 5) {
-                Toast.makeText(getApplicationContext(), "다섯자리 그룹 초대 코드를 입력해주세요!", Toast.LENGTH_SHORT)
-                        .show();
-            } else if (mode == Mode.CREATE_GROUP && getGroupName().length() < 1) {
-                Toast.makeText(getApplicationContext(), "그룹 이름을 입력해주세요!", Toast.LENGTH_SHORT)
-                        .show();
-            } else if (imageData == null || imageData.length == 0) {
+            if (imageData == null || imageData.length == 0) {
                 Toast.makeText(getApplicationContext(), "프로필 사진을 선택해주세요!", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (getNickname().length() < 1) {
+                Toast.makeText(getApplicationContext(), "이름을 입력해주세요!", Toast.LENGTH_SHORT)
                         .show();
             } else if (getPhone().length() < 1) {
                 Toast.makeText(getApplicationContext(), "핸드폰 번호를 입력해주세요!", Toast.LENGTH_SHORT)
                         .show();
             } else if (!isValidPhone(getPhone())) {
                 Toast.makeText(getApplicationContext(), "핸드폰 번호를 01012345678 형식으로 입력해주세요", Toast.LENGTH_SHORT)
+                        .show();
+            }
+            if (mode == Mode.JOIN_GROUP && getCode().length() != 5) {
+                Toast.makeText(getApplicationContext(), "다섯자리 그룹 초대 코드를 입력해주세요!", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (mode == Mode.CREATE_GROUP && getGroupName().length() < 1) {
+                Toast.makeText(getApplicationContext(), "그룹 이름을 입력해주세요!", Toast.LENGTH_SHORT)
                         .show();
             } else {
                 Toast.makeText(getApplicationContext(), "가입중입니다", Toast.LENGTH_SHORT)
@@ -151,30 +156,25 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        userService.auth.register(getToken(), getNickname()).enqueue(new Callback<User>() {
+        userService.auth.register(getToken(), getNickname(), getPhone()).enqueue(new Callback<User>() {
             // 토큰 검증 결과에 따라 로그 출력
             @Override
             @EverythingIsNonNull
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && response.body().getId() != null) {
                     Toast.makeText(getApplicationContext(), "안녕하세요.", Toast.LENGTH_SHORT)
                             .show();
                     User user = response.body();
-                    assert user != null;
                     userId = user.getId();
-
                     postImage(userId);
-                    setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(user, getToken()));
                 } else if (response.code() == ResponseCode.HTTP_CONFLICT) {
-                    Log.i("RegisterCallback", "이미 존재하는 유저입니다: " + response.body());
+                    Log.i("RegisterCallback", "이미 존재하는 유저입니다: " + response.message());
+                    // JoinGroupActivity로 redirect
                     setResult(ResponseCode.REGISTER_FAILURE);
                 } else {
-                    Log.i("RegisterCallback", "유저 등록에 실패했습니다: " + response.body());
+                    Log.i("RegisterCallback", "유저 등록에 실패했습니다: " + response.message());
                     setResult(ResponseCode.REGISTER_FAILURE);
                 }
-
-                if (mode == Mode.CREATE_GROUP) createGroup(userId);
-                else joinGroup(userId);
             }
 
             @Override
@@ -192,17 +192,18 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void joinGroup(String userId) {
+    public void joinGroup(String userId) {
         Log.i("joinGroup", "그룹에 들어가는 중");
-        userService.group.joinGroup(getCode(), userId).enqueue(new Callback<Group>() {
+        userService.group.joinGroup(getCode(), userId).enqueue(new Callback<User>() {
             // 토큰 검증 결과에 따라 로그 출력
             @Override
             @EverythingIsNonNull
-            public void onResponse(Call<Group> call, Response<Group> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 Log.i("joinGroup", response.message());
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(getApplicationContext(), "그룹에 가입되었습니다!", Toast.LENGTH_SHORT)
                             .show();
+                    setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(response.body(), getToken()));
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "그룹 코드를 다시 확인해주세요!", Toast.LENGTH_SHORT)
@@ -212,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             @EverythingIsNonNull
-            public void onFailure(Call<Group> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.d("JoinGroup", "joinGroup (group/join/{code}/{userId}) API 호출에 실패했습니다");
                 t.printStackTrace();
                 setResult(ResponseCode.SERVER_FAILURE);
@@ -221,14 +222,15 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createGroup(String userId) {
-        userService.group.createGroup(getGroupName(), userId).enqueue(new Callback<Group>() {
+        userService.group.createGroup(getGroupName(), userId).enqueue(new Callback<User>() {
             @Override
             @EverythingIsNonNull
-            public void onResponse(Call<Group> call, Response<Group> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 Log.i("createGroup", response.message());
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(getApplicationContext(), "그룹을 생성하고, 가입했습니다", Toast.LENGTH_SHORT)
                             .show();
+                    setResult(ResponseCode.REGISTER_SUCCESSFUL, UserUtils.getUserIntent(response.body(), getToken()));
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "그룹을 생성하지 못했습니다", Toast.LENGTH_SHORT)
@@ -238,7 +240,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             @EverythingIsNonNull
-            public void onFailure(Call<Group> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.d("CreateGroup", "createGroup (group/create/{name}/{userId}) API 호출에 실패했습니다");
                 t.printStackTrace();
                 setResult(ResponseCode.SERVER_FAILURE);
@@ -255,22 +257,22 @@ public class RegisterActivity extends AppCompatActivity {
         RequestBody file = RequestBody.create(MediaType.parse("image/*"), imageData);
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload", "abc", file);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-        userService.image.postImage(userId, body, name).enqueue(new Callback<String>() {
-                        @Override
-                        @EverythingIsNonNull
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            // TODO glide 로 서버에서 받은 URL 로 이미지를 imagePreview 에 띄우기
-                            Toast.makeText(getApplicationContext(), response.body(), Toast.LENGTH_SHORT).show();
-                            Log.d("RegisterActivity", response.toString());
-                        }
+        userService.image.postImage(userId, body, name).enqueue(new Callback<User>() {
+                                                                    @Override
+                                                                    @EverythingIsNonNull
+                                                                    public void onResponse(Call<User> call, Response<User> response) {
+                                                                        Log.d("RegisterActivity", response.toString());
+                                                                        if (mode == Mode.CREATE_GROUP) createGroup(userId);
+                                                                        else joinGroup(userId);
+                                                                    }
 
-                        @Override
-                        @EverythingIsNonNull
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
-                            t.printStackTrace();
-                        }
-                    }
+                                                                    @Override
+                                                                    @EverythingIsNonNull
+                                                                    public void onFailure(Call<User> call, Throwable t) {
+                                                                        Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
+                                                                        t.printStackTrace();
+                                                                    }
+                                                                }
         );
     }
 
@@ -298,6 +300,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 imageData = byteArrayOutputStream.toByteArray();
                 Log.i("UploadImageActivity", "이미지 데이터 만듦 " + imageData.length);
+                // TODO imageData 를 preview image 에 보여주기
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
