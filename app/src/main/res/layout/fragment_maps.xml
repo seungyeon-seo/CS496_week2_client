@@ -63,7 +63,6 @@
         android:backgroundTint="@color/colorPrimary"
         android:elevation="6dp"
         android:scaleType="fitCenter"
-        android:layout_marginBottom="230dp"
         android:layout_marginRight="15sp" />
 
 
